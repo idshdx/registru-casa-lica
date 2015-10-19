@@ -33,9 +33,10 @@ class Login extends CI_Controller {
 
             if($is_user) {
             	$this->make_session($username, $password);
-            	$this->load->view('index', ['logged_in' => true]) ;
+            	$this->load->view('index');
             } else {
-            	$this->load->view('login_view', ['error_msg' => 'Invalid Username or Password']);
+              $this->session->set_flashdata('error', 'Invalid Username or Password!');
+            	redirect('/login');
             }
        }    
 	}

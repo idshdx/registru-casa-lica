@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/styles.css">
-    <script src="<?php echo base_url(); ?>assets/js/jquery.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+
     <title>Registru de Casa</title>
 </head>
 <body>
@@ -36,6 +37,7 @@
 					<div class="form-group"> 
 						<div class="col-sm-offset-4 col-sm-4">
 							<button type="submit" class="btn btn-primary">Submit</button>
+							<div id="infoMessage"><?php echo $this->session->flashdata('error');?></div>
 						</div>
 					</div>
 				</form>
