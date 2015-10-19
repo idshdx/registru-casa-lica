@@ -1,0 +1,126 @@
+@media print {
+    body {
+        font-size: 1.14em;
+    }
+    .action {
+        display: none;
+    }
+    .screen, .button, .save, .print, footer {
+        display: none;
+    }
+}
+@media screen {
+    body {
+        margin-top: 75px;
+        background-color: #e4e7ec;
+    }
+    .container {
+        background-color: #fff;
+        box-shadow: 0 8px 17px rgba(0, 0, 0, .2);
+    }
+    footer {
+        margin-top: 25px;
+    }
+    .page-space {
+        margin-top: 22%;
+    }
+}
+.bold {
+    font-weight: bold;
+}
+.table, .table-bordered td, .table-bordered th {
+    border-color: black !important;
+}
+.table > tbody > tr > td, .table > thead > tr > th {
+    text-align: center;
+    vertical-align: middle;
+    padding: 3px;
+}
+.glyphicon-plus, .glyphicon-pencil, .glyphicon-calendar {
+    color: #fff;
+}
+.input-group-addon, .calendar {
+    border-radius: 1px;
+    border-color: #2e6da4;
+}
+.input-group-addon {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+.widget {
+    width: 90%;
+}
+.action {
+    /*width: 3.5em;*/
+    cursor: pointer;
+}
+.btn {
+    width: 100%;
+    border-radius: 1px;
+}
+.btn-xs {
+    min-width: 85px;
+}
+.small-btn {
+    max-width: 50%;
+}
+.navbar {
+    border-radius: 0;
+}
+.usr-input, .button, .screen {
+    height: 2em;
+    border-radius: 1px;
+}
+.login-input {
+    border-radius: 1px;
+}
+.save, .print {
+    width: 25%;
+}
+.panel {
+    border-radius: 1px;
+    max-width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16%;
+    box-shadow: 0 8px 17px rgba(0, 0, 0, .2);
+}
+.dropdown-menu {
+    border-radius: 1px;
+}
+.pullup {
+    margin-top: -20px;
+}
+.bigfont {
+    font-size: 1.16em;
+}
+footer {
+    width: 100%;
+    background-color: #101010;
+    height: 52px;
+    color: #fff;
+}
+footer > p {
+    text-align: center;
+    padding-top: 1%;
+    font-size: 0.9em;
+    font-weight: 300;
+}
+thead>tr:first-child, tbody>tr:last-child{
+    font-weight: bold;
+}
+.template_row{
+    display: none;
+}
+
+input {
+    text-align: center;
+}
+
+.big-row{
+    height: 80px;
+}
+.btn-sm {
+     padding-left: 5px;
+     padding-right: 5px;
+}
