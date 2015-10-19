@@ -3,7 +3,7 @@ function jso2string(jso) {
 }
 function recordFromInputRow(row) {
     var inputs= row.children('td').children('input');
-    var record={ ID: row[0].dbid };
+    var record={  }; // { ID: row[0].dbid }
     record['Furnizor']= inputs.eq(0).val();
     var value= inputs.eq(1).val();
     if(value!='') record['Factura']= value;
@@ -32,7 +32,7 @@ function postUpdateRecord() {
     var record= recordFromInputRow(tr);
     tr.addClass('hidden');
     var tip= tr.parent().parent()[0].id.substr(6);
-    $.post( '../index.php/action/edit_record/Sume'+tip, record, recordUpdated );
+    $.post( '../index.php/action/edit_record/Sume'+tip+'/'+tr[0].dbid+'/'+serverData.zi.ID, record, recordUpdated );
 }
 function toggleEdit() {
     var row= $(this).parent().parent();
