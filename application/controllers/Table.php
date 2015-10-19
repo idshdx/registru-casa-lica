@@ -70,21 +70,11 @@ class Table extends CI_Controller {
 
 
      public function new_day($idzi) {
-          if(last_day_id() == $this->id_first_day_of_month($idzi)) {
+          if(last_day_id() == $this->date_model->id_first_day_by_id($idzi)) {
                
           }
 
           $this->get_records($this->date_model->last_day_id());
-          
-     }
-
-     public function id_first_day_of_month($idzi) {
-          $year = $this->date_model->get_date_by_id($idzi)['year'];
-          $month = $this->date_model->get_date_by_id($idzi)['month'];
-
-          $id_of_first_day = intval($this->date_model->id_first_day($year, $month));
-          
-          return $id_of_first_day;
           
      }
 

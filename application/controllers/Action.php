@@ -61,7 +61,7 @@ class Action extends CI_Controller {
               if($idfurnizor == 0) $idfurnizor = $this->furnizori_model->new_furnizor($tip_furnizor, $furnizor);  
               $post['IDFurnizor'] = $idfurnizor;
 
-              $this->main_model->edit_record($table, $post);
+              $this->main_model->edit_record($table, $id, $post);
 
               echo json_encode($this->main_model->get_last_record($table));
             

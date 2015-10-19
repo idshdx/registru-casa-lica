@@ -50,7 +50,7 @@ class main_model extends CI_Model {
 
 	public function edit_record($table, $id, $data) {			
 		$this->db->where('ID', $id);
-		$this->db->update($table, $data);	
+		$this->db->replace($table, $data);	
 	}
 
 	public function delete_record($table, $id, $idzi) {
