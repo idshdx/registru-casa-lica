@@ -12,17 +12,22 @@ function recordFromInputRow(row) {
     record['Suma']= inputs.eq(3).val();
     return record;
 }
+function templateRow(TBody) {
+    alert(TBody[0].id + ' ' +TBody.children('tr.template_row').length);
+    return TBody.children('tr.template_row');
+}
+function inputRow(table) {
+    return table.children('tr.input_row').last();
+}
 function recordUpdated(data) {
     alert(data);
     var record= JSON.parse(data);
-    var editRow, recTable;
+    var editRow;
     forEachMember( tables, function(table) {
-        if(!editRow.length) {
-            editRow= table.children('tr.input_row.hidden');
-        }
+        if(!(editRow && editRow.length)) editRow= table.children('tr.input_row.hidden');
     });
-    recTable= editRow.parent().parent();
-    var displayRow= templateRow(recTable).clone().removeClass('template_row').insertAfter(editRow);
+    var recTableBody= editRow.parent();
+    var displayRow= templateRow(recTableBody).clone().removeClass('template_row').insertAfter(editRow);
     displayRow[0].dbid= record.ID;
     setRowValues(displayRow, record.Furnizor, record.Factura, record.Chitanta, record.Suma);
     editRow.remove();
@@ -56,12 +61,6 @@ function setRowValues(row) {
         //traverse args, ignore first. when i=1, set td with id 0, and so on
         if(i>0) row.children('td').eq(i-1).text(val);
     });
-}
-function templateRow(table) {
-    return table.children('tr.template_row');
-}
-function inputRow(table) {
-    return table.children('tr.input_row').last();
 }
 function addDataRow(table) {
     addedRow = templateRow(table).clone().removeClass('template_row').insertBefore(inputRow(table));
