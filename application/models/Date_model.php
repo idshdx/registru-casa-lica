@@ -41,7 +41,7 @@ class date_model extends CI_Model {
     	$year = $this->get_date_by_id($idzi)['year'];
         $month = $this->get_date_by_id($idzi)['month'];
     	
-    	$query = "SELECT Data FROM Zile WHERE Data = STR_TO_DATE('$year, $month,1' ,'%Y-%m-%d')";
+    	$query = "SELECT Data FROM Zile WHERE Data = STR_TO_DATE('$year, $month,1' ,'%Y,%m,%d')";
 
     	return date_parse($this->db->query($query)->result_array()[0]['Data']);
     }

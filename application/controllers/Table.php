@@ -33,7 +33,10 @@ class Table extends CI_Controller {
      }
 
      public function test() {
-          var_dump($this->soldinitial_model->get_sold_initial($this->date_model->id_first_day_by_id(2)) );
+          var_dump($this->date_model->date_first_day(2)['year'] & $this->date_model->date_first_day(2)['month'] & $this->date_model->date_first_day(2)['day']) ;
+          $array = $this->date_model->date_first_day(2);
+          $test = join('-', [$array['year'], $array['month'], $array['day'] ] );
+          var_dump($test);
      }
 
      public function get_furnizori_json() {
@@ -50,7 +53,9 @@ class Table extends CI_Controller {
           $soldinitial = $this->soldinitial_model->get_sold_initial($this->date_model->id_first_day_by_id($idzi));
 
           $zi = $this->date_model->get_id_date_by_id($idzi);
-          $first_date = $this->date_model->date_first_day($idzi);
+
+          $first_date_array = $this->date_model->date_first_day(2);
+          $first_date = join('-', [$first_date_array['year'], $first_date_array['month'], $first_date_array['day'] ] );
           $furnizori = $this->get_furnizori();
 
           $calcule = ['total_chelt' => floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi)),'total_tva9' => floatval($this->calcul_model->cumul('SumeMarfaTVA9', $idzi)), 
