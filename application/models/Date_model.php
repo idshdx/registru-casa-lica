@@ -59,6 +59,17 @@ class date_model extends CI_Model {
     	
 		
 		return intval($result[0]['ID']);	
+    }
+
+    public function new_day() {
+        $query = "SELECT ADDDATE((SELECT Data FROM Zile ORDER BY Data DESC LIMIT 1), INTERVAL 1 DAY) as newdate;";
+        $newdate = $this->db->query($query)->result_array()[0]['newdate'];
+        $query = "INSERT INTO Zile (Data) VALUES('$newdate');";
+
+        return $this->db->query($query);
+        
+
+        
     }	
 
     public function __destruct() {

@@ -33,7 +33,7 @@ class Table extends CI_Controller {
      }
 
      public function test() {
-         var_dump($this->date_model->first_day_ever());
+         var_dump($this->date_model->new_day(5));
      }
 
      public function get_furnizori_json() {
@@ -72,12 +72,10 @@ class Table extends CI_Controller {
      }
 
 
-     public function new_day($idzi) {
-          if(last_day_id() == $this->date_model->id_first_day_by_id($idzi)) {
-               
-          }
+     public function new_day() {
 
-          $this->get_records($this->date_model->last_day_id());
+          $this->date_model->new_day();
+          echo json_encode(['result' => 'success']);
           
      }
 
