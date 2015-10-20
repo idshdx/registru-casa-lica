@@ -131,30 +131,56 @@ function forEachMember( Obj, func){
         func(Obj[key], key, Obj);
     });
 }
+function datePicked(dateChange){
+    datatitlu.text(datePicker.data('DateTimePicker').viewDate().format('LLL'));
+    //(datePicker.datetimepicker('getFormattedDate'));
+}
 function setupDates(){
 
-    //set date picker date format
-    $('#datetimepicker1').datetimepicker( {locale: 'ro', format: 'DD.MM.YYYY'} );
+    window.datePicker= $('#datetimepicker1');
+    window.dateInput= datePicker.children('input');
 
     //allow selecting only dates registered in the db
     var minDate= serverData.first_date.split('-'), maxDate= new Date(serverData.zi.Data);
-    alert(minDate);
     minDate= new Date(minDate[0], minDate[1]-1, minDate[2]);
-    $('#datetimepicker1').data("DateTimePicker").minDate(minDate).maxDate(maxDate);
+
+    //set date picker date format
+    datePicker.datetimepicker( {locale: 'ro', format: 'DD.MM.YYYY', defaultDate: maxDate} );
+
+    datePicker.data("DateTimePicker").minDate(minDate).maxDate(maxDate);
+
+
+    //setup datepicked change callback
+    datePicker.on("dp.change", datePicked);
+    //datePicker.data("DateTimePicker").date(maxDate);
+
+    datatitlu.text(maxDate.toLocaleDateString('ro-RO')); //(dateInput.val());
+    //datePicked(); //update the title date
+}
+function endDayDone(data){
+    newLastDay = JSON.parse(data).new_last_day.split('-');
+    newLastDay = new Date(newLastDay[0], newLastDay[1]-1, newLastDay[2]);
+    datePicker.data('DateTimePicker').maxDate(newLastDay);
+}
+function endDay(){
+    $.post('../index.php/table/new_day', null, endDayDone);
 }
 function pageLoaded($) {
 
+    window.datatitlu= $('#datatitlu');
     setupDates();
 
-    cumuli= $('#cumuli').children('td');
+    window.end_day= $('#end_day').click(endDay);
+
+    window.cumuli= $('#cumuli').children('td');
 
     getTables();
-    datatitlu= $('#datatitlu');
-    printJSO(serverData);
 
     popPage();
     forEachMember( tables, function(table){
         table.find('button').last().click(requestNewRecord);
     });
+
+    printJSO(serverData);
 }
 jQuery(pageLoaded);

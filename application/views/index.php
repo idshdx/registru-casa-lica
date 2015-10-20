@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>/assets/css/bootstrap.css">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>/assets/css/bootstrap-datetimepicker.css">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>/assets/css/styles.css">
-    <script src="<?php echo base_url(); ?>/assets/js/jquery.js"></script>
-    <script src="<?php echo base_url(); ?>/assets/js/moment-with-locales.js"></script>
-    <script src="<?php echo base_url(); ?>/assets/js/bootstrap.js"></script>
-    <script src="<?php echo base_url(); ?>/assets/js/bootstrap-datetimepicker.js"></script>
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.css">
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/styles.css">
+    <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/moment-with-locales.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/bootstrap.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/bootstrap-datetimepicker.js"></script>
     <title>Registru de Casă</title>
     <script>
         serverData= <?php echo $server_data ?>;
     </script>
-    <script type="text/javascript" src="<?php echo base_url(); ?>/assets/js/registru.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/registru.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -209,7 +209,7 @@
             </tbody>
 		</table>
 		<div class="text-center">
-			<button class="btn btn-primary save">
+			<button id="end_day" class="btn btn-primary save">
                 <span class="glyphicon glyphicon-ok"></span> Salvează Registru
             </button>
 		</div>
