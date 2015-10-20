@@ -51,8 +51,9 @@ class Table extends CI_Controller {
 
           $zi = $this->date_model->get_id_date_by_id($idzi);
 
-          $first_date_array = $this->date_model->first_day_ever();
-          $first_date = join('-', [$first_date_array['year'], $first_date_array['month'], $first_date_array['day'] ] );
+          $first_date = $this->parsed_date_to_string($this->date_model->first_day_ever()) ;
+
+     
           $furnizori = $this->get_furnizori();
 
           $calcule = ['total_chelt' => floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi)),'total_tva9' => floatval($this->calcul_model->cumul('SumeMarfaTVA9', $idzi)), 
@@ -73,10 +74,13 @@ class Table extends CI_Controller {
 
 
      public function new_day() {
-
           $this->date_model->new_day();
-          echo json_encode(['result' => 'success']);
-          
+          echo json_encode(['new_last_day' => $this->parsed_date_to_string( $this->date_model->get_date_by_id($this->date_model->last_day_id() ) ) ] );      
+     }
+
+     //$date = result of call to date_parse
+     private function parsed_date_to_string($date) {
+          return  join('-', [$date['year'], $date['month'], $date['day'] ] );
      }
 
 }
