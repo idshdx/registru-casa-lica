@@ -19,21 +19,23 @@ class Table extends CI_Controller {
      }
 
      public function index() {
-          $last_day = $this->date_model->last_day_id();
+          /*$last_day_id = $this->date_model->last_day_id();
           
-          $data['server_data'] = json_encode($this->get_records($last_day)); 
+          
+          $data['server_data'] = json_encode($this->get_records($last_day)); */
 
-          $this->load->view('index',$data);
+          $this->load->view('index');
 
      }
 
      //for ajax requests
-     public function get_records_json($idzi) {
+     public function get_records_json($data) {
+          $idzi = (int)$this->date_model->id_by_date($data);
           echo json_encode($this->get_records($idzi));
      }
 
      public function test() {
-         var_dump($this->date_model->new_day(5));
+         var_dump($this->date_model->id_by_date('2015-10-2'));
      }
 
      public function get_furnizori_json() {

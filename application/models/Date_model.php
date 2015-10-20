@@ -52,6 +52,11 @@ class date_model extends CI_Model {
         return date_parse($this->db->query($query)->result_array()[0]['Data']);
     }
 
+    public function id_by_date($data) {
+        $query = "SELECT ID FROM Zile WHERE DATA = STR_TO_DATE('$data' ,'%Y-%m-%d')";
+        return $this->db->query($query)->result_array()[0]['ID'];
+    }
+
     //Returns the ID of the last entry in the table
     public function last_day_id() {
     	$query = "SELECT * FROM Zile order by ID DESC LIMIT 1 ;";
