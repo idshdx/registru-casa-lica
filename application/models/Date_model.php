@@ -38,10 +38,10 @@ class date_model extends CI_Model {
 
     //Returns the Date of the first day of the month by IDzi.Depends on get_date_by_id()
     public function date_first_day($idzi) {
-    	$year = $this->main_model->get_date_by_id($idzi)['year'];
-        $month = $this->main_model->get_date_by_id($idzi)['month'];
+    	$year = $this->get_date_by_id($idzi)['year'];
+        $month = $this->get_date_by_id($idzi)['month'];
     	
-    	$query = "SELECT Data FROM Zile WHERE Data = STR_TO_DATE('$year, $month,1' ,'%Y,%m,%d')";
+    	$query = "SELECT Data FROM Zile WHERE Data = STR_TO_DATE('$year, $month,1' ,'%Y-%m-%d')";
 
     	return date_parse($this->db->query($query)->result_array()[0]['Data']);
     }

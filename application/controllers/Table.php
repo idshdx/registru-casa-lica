@@ -50,13 +50,14 @@ class Table extends CI_Controller {
           $soldinitial = $this->soldinitial_model->get_sold_initial($this->date_model->id_first_day_by_id($idzi));
 
           $zi = $this->date_model->get_id_date_by_id($idzi);
+          $first_date = $this->date_model->date_first_day($idzi);
           $furnizori = $this->get_furnizori();
 
           $calcule = ['total_chelt' => floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi)),'total_tva9' => floatval($this->calcul_model->cumul('SumeMarfaTVA9', $idzi)), 
                       'total_tva24' => floatval($this->calcul_model->cumul('SumeMarfaTVA24', $idzi)), 'total_aport' => floatval($this->calcul_model->cumul('SumeAport', $idzi)), 
                       'soldinitial' => floatval($soldinitial) ];
           
-          return ['Cheltuieli' => $chelt, 'MarfaTVA9' => $marfa9, 'MarfaTVA24' => $marfa24, 'Aport' => $aport, 'zi' => $zi, 
+          return ['Cheltuieli' => $chelt, 'MarfaTVA9' => $marfa9, 'MarfaTVA24' => $marfa24, 'Aport' => $aport, 'zi' => $zi, 'first_date' => $first_date,
                     'furnizori' => $furnizori, 'cumuli' => $calcule] ;
      }
 

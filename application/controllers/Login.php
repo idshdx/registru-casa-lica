@@ -33,10 +33,10 @@ class Login extends CI_Controller {
 
             if($is_user) {
             	$this->make_session($username, $password);
-            	redirect('/table');
+            	redirect(site_url('table/'));
             } else {
               $this->session->set_flashdata('error', 'Invalid Username or Password!');
-            	redirect('/login');
+            	redirect(site_url('login/'));
             }
        }    
 	}
