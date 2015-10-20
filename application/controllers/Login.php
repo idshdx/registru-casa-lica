@@ -41,14 +41,9 @@ class Login extends CI_Controller {
        }    
 	}
 
-	public function make_session($username, $password) {
+	private function make_session($username, $password) {
 		$this->session->set_userdata("userdata", "secure($username, $password)");
     $this->session->mark_as_temp('userdata', 7200); //7200s,2hours
-	}
-
-	public function session_check() {
-		$logged_in = $_SESSION['userdata'];
-		var_dump(isset($logged_in));
 	}
 
 }

@@ -49,7 +49,7 @@ class Table extends CI_Controller {
           echo json_encode($this->get_records($idzi));
      }
 
-     public function get_records($idzi) {
+     private function get_records($idzi) {
 
           $chelt = $this->main_model->get_records('SumeCheltuieli', $idzi);
           $marfa9 = $this->main_model->get_records('SumeMarfaTVA9', $idzi);
@@ -75,7 +75,7 @@ class Table extends CI_Controller {
                     'furnizori' => $furnizori, 'cumuli' => $calcule] ;
      }
 
-     function get_furnizori() {
+     private function get_furnizori() {
           $furnizori_chelt = $this->furnizori_model->get_furnizori('Cheltuieli');
           $furnizori_marfa9 = $this->furnizori_model->get_furnizori('MarfaTVA9');
           $furnizori_marfa24 = $this->furnizori_model->get_furnizori('MarfaTVA24');
