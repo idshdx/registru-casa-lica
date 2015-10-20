@@ -33,10 +33,7 @@ class Table extends CI_Controller {
      }
 
      public function test() {
-          var_dump($this->date_model->date_first_day(2)['year'] & $this->date_model->date_first_day(2)['month'] & $this->date_model->date_first_day(2)['day']) ;
-          $array = $this->date_model->date_first_day(2);
-          $test = join('-', [$array['year'], $array['month'], $array['day'] ] );
-          var_dump($test);
+         var_dump($this->date_model->first_day_ever());
      }
 
      public function get_furnizori_json() {
@@ -54,7 +51,7 @@ class Table extends CI_Controller {
 
           $zi = $this->date_model->get_id_date_by_id($idzi);
 
-          $first_date_array = $this->date_model->date_first_day(2);
+          $first_date_array = $this->date_model->first_day_ever();
           $first_date = join('-', [$first_date_array['year'], $first_date_array['month'], $first_date_array['day'] ] );
           $furnizori = $this->get_furnizori();
 
