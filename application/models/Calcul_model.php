@@ -9,11 +9,8 @@ class calcul_model extends CI_Model {
 
     // Returns the sum(total of sums) on a day
     public function get_amount_by_day($table, $idzi) {
-        $this->db->where('IDzi', $idzi);
-        $this->db->select('Suma');
-        $result = $this->db->get($table);
-        
-        return $result->result_array(); 
+        $query = "SELECT SUM(Suma) as Suma From $table WHERE Idzi = $idzi";
+        return (float)$this->db->query($query)->result_array()[0]['Suma'];
     }
 
     //Computes all the sums from a table depending on the lastday, starting on 1st of every month

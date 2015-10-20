@@ -24,25 +24,30 @@ class Table extends CI_Controller {
  
           
           $data['server_data'] = json_encode($this->get_records($idzi)); 
+          $data['server_total'] = json_encode($this->get_total($idzi)); 
 
           $this->load->view('index', $data);
 
      }
 
-     //for ajax requests
-     public function get_records_json($data) {
-          $idzi = $this->date_model->id_by_date($data);
-          echo json_encode($this->get_records($idzi));
+     public function get_total_json($idzi) {
+          echo json_encode($this->get_total($idzi));
      }
-
-     public function get_total_json() {
-         
+     private function get_total($idzi) {
+         return ['total_chelt'=>$this->calcul_model->get_amount_by_day('SumeCheltuieli', $idzi), 
+                    'total_tva9'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA9', $idzi),
+                    'total_tva24'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA24', $idzi), 
+                    'total_aport'=> $this->calcul_model->get_amount_by_day('SumeAport', $idzi)];
      }
 
      public function get_furnizori_json() {
           echo  json_encode($this->get_furnizori());
      }
 
+     public function get_records_json($data) {
+          $idzi = $this->date_model->id_by_date($data);
+          echo json_encode($this->get_records($idzi));
+     }
 
      public function get_records($idzi) {
 
@@ -60,8 +65,10 @@ class Table extends CI_Controller {
      
           $furnizori = $this->get_furnizori();
 
-          $calcule = ['cumul_chelt' => floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi)),'cumul_tva9' => floatval($this->calcul_model->cumul('SumeMarfaTVA9', $idzi)), 
-                      'cumul_tva24' => floatval($this->calcul_model->cumul('SumeMarfaTVA24', $idzi)), 'cumul_aport' => floatval($this->calcul_model->cumul('SumeAport', $idzi)), 
+          $calcule = ['chelt' => floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi)),
+                      'tva9' => floatval($this->calcul_model->cumul('SumeMarfaTVA9', $idzi)), 
+                      'tva24' => floatval($this->calcul_model->cumul('SumeMarfaTVA24', $idzi)), 
+                      'aport' => floatval($this->calcul_model->cumul('SumeAport', $idzi)), 
                       'soldinitial' => floatval($soldinitial) ];
           
           return ['Cheltuieli' => $chelt, 'MarfaTVA9' => $marfa9, 'MarfaTVA24' => $marfa24, 'Aport' => $aport, 'zi' => $zi, 'first_date' => $first_date,
