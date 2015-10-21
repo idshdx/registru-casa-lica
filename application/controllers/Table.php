@@ -19,7 +19,7 @@ class Table extends CI_Controller {
 
 
      public function test() {
-          var_dump($this->date_model->get_id_date_by_id(5));
+          var_dump($this->date_model->get_id_and_date(5));
      }
 
      public function index() {
@@ -27,7 +27,7 @@ class Table extends CI_Controller {
           $records = $this->get_records($idzi);
           $records['totals'] = $this->get_total($idzi); 
 
-          $this->load->view('index', json_encode($records));
+          $this->load->view('index', json_encode(['server_data'=>$records]));
      }
 
      public function get_total_json($idzi) {
@@ -53,7 +53,7 @@ class Table extends CI_Controller {
           $aport = $this->main_model->get_records('SumeAport', $idzi);
 
           $soldinitial = $this->soldinitial_model->get_sold_initial($this->date_model->id_first_day_by_id($idzi));
-          $zi = $this->date_model->get_id_date_by_id($idzi);
+          $zi = $this->date_model->get_id_and_date($idzi);
           $first_date = $this->parsed_date_to_string($this->date_model->first_day_ever());     
           $furnizori = $this->get_furnizori();
 

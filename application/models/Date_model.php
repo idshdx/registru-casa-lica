@@ -15,7 +15,7 @@ class date_model extends CI_Model {
     }
 
     //Returns date+ID as an array by IDZi
-    public function get_id_date_by_id($idzi) {
+    public function get_id_and_date($idzi) {
         $query = "SELECT * FROM Zile WHERE ID = $idzi ;";
         $result = $this->db->query($query)->result_array();
         $final = ['ID' => intval($result[0]['ID']), 'Data' => $result[0]['Data']];
