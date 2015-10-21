@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Action extends CI_Controller {
 
 	public function __construct() {
-
       parent::__construct();
       $this->load->helper('form');
       $this->load->library('session');
@@ -19,23 +18,16 @@ class Action extends CI_Controller {
     }
 
     public function index() {
-      /*$data = ['IDZi' => 1, 'Suma' => 301, 'Factura' => 'FacturaNEW1', 'IDFurnizor' => 1];
-      $this->main_model->new_record('SumeCheltuieli', $data);
-      var_dump($this->main_model->new_record('SumeMarfaTVA9', $data) );*/
-     
      var_dump($this->furnizori_model->last_furnizor());
       
     }
 
     public function add_record($table) {
-
           $post = $this->input->post();
           unset($post['Furnizor']);
-
           $furnizor = $this->input->post('Furnizor');
           $tip_furnizor = substr($table, 4);
-          $idfurnizor = $this->furnizori_model->furnizor_id($furnizor, $tip_furnizor);
-          
+          $idfurnizor = $this->furnizori_model->furnizor_id($furnizor, $tip_furnizor);        
 
           if($idfurnizor == 0) $idfurnizor = $this->furnizori_model->new_furnizor($tip_furnizor, $furnizor);  
           $post['IDFurnizor'] = $idfurnizor;
@@ -47,9 +39,9 @@ class Action extends CI_Controller {
      }
 
      public function edit_record($table, $id, $idzi) {
-         /*if( !isset($_SESSION['userdata']) ) {
+         if( !isset($_SESSION['userdata']) ) {
                   redirect("login");
-            } else {*/
+            } else {
               $post = $this->input->post();
               unset($post['Furnizor']);
 
@@ -64,14 +56,15 @@ class Action extends CI_Controller {
               $this->main_model->edit_record($table, $id, $post);
 
               echo json_encode($this->main_model->get_last_record($table));
-            
+            }  
      }
 
      public function delete_record($table, $id, $idzi) {
-            /*if( !isset($_SESSION['userdata']) ) {
+            if( !isset($_SESSION['userdata']) ) {
                   redirect("login");
-            } else {*/
+            } else {
                   $this->main_model->delete_record($table, $id, $idzi);
+            }
             
      }
 

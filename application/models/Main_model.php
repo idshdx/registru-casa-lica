@@ -2,17 +2,15 @@
 
 class main_model extends CI_Model {
 
-	function __construct() {
+	public function __construct() {
         parent::__construct();
-        
         $this->load->database();
     }
-
+    //Method to fetch recods
     public function get_records($table, $idzi) {
     	$this->db->where('IDzi', $idzi);
 		$this->db->select('*');
 		$result = $this->db->get($table)->result_array();
-
 		$count = count($result);
 		
 		for($i = 0; $i < $count; $i++) {
@@ -25,6 +23,7 @@ class main_model extends CI_Model {
 		return $result;	
     }
 
+    //Fetch the last record(array)
     public function get_last_record($table){
     	$query = "SELECT * from $table ORDER BY ID DESC LIMIT 1;";
 
@@ -35,6 +34,7 @@ class main_model extends CI_Model {
     	return $final;
     }
 
+    //Fetch the ID of the last record
     public function get_last_record_id($table) {
     	$query = "SELECT ID from $table ORDER BY ID DESC LIMIT 1;";
 

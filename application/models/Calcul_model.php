@@ -7,18 +7,18 @@ class calcul_model extends CI_Model {
         $this->load->database();
     }
 
-    // Returns the sum(total of sums) on a day
+    // Returns the sum(total of sums) on a particular day
     public function get_amount_by_day($table, $idzi) {
         $query = "SELECT SUM(Suma) as Suma From $table WHERE Idzi = $idzi";
+
         return (float)$this->db->query($query)->result_array()[0]['Suma'];
     }
 
-    //Computes all the sums from a table depending on the lastday, starting on 1st of every month
+    //Computes all the sums from a table, starting on 1st of every month untill specified($idzi)
     public function cumul($tabel, $idzi) {
         $previdzi = $idzi-1;
         $this->load->model('date_model');
         $firstid = $this->date_model->id_first_day_by_id($idzi);
-
         $query = "SELECT Sum(Suma) as Suma FROM $tabel WHERE IDZi BETWEEN $firstid AND $previdzi";
         
         return $this->db->query($query)->result_array()[0]['Suma'];
