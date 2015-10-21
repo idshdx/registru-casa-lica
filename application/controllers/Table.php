@@ -24,10 +24,10 @@ class Table extends CI_Controller {
 
      public function index() {
           $idzi = $this->date_model->last_day_id() ;        
-          $data['server_data'] = json_encode($this->get_records($idzi)); 
-          $data['server_total'] = json_encode($this->get_total($idzi)); 
+          $records = $this->get_records($idzi);
+          $records['totals'] = $this->get_total($idzi); 
 
-          $this->load->view('index', $data);
+          $this->load->view('index', json_encode($records));
      }
 
      public function get_total_json($idzi) {
