@@ -34,10 +34,10 @@ class Table extends CI_Controller {
           echo json_encode($this->get_total($idzi));
      }
      private function get_total($idzi) {
-         return ['total_chelt'=>$this->calcul_model->get_amount_by_day('SumeCheltuieli', $idzi), 
-                    'total_tva9'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA9', $idzi),
-                    'total_tva24'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA24', $idzi), 
-                    'total_aport'=> $this->calcul_model->get_amount_by_day('SumeAport', $idzi)];
+         return ['chelt'=>$this->calcul_model->get_amount_by_day('SumeCheltuieli', $idzi), 
+                    'tva9'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA9', $idzi),
+                    'tva24'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA24', $idzi), 
+                    'aport'=> $this->calcul_model->get_amount_by_day('SumeAport', $idzi)];
      }
 
      public function get_records_json($data) {
