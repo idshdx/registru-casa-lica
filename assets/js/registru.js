@@ -12,18 +12,18 @@ function recordFromInputRow(row) {
     record['Suma']= inputs.eq(3).val();
     return record;
 }
-function templateRow(TBody) {
-    return TBody.children('tr.template_row');
+function templateRow(tb) {
+    return tb.children('tr.template_row');
 }
-function inputRow(TBody) {
-    return TBody.children('tr.input_row').last();
+function inputRow(tb) {
+    return tb.children('tr.input_row').last();
 }
 function recordUpdated(data) {
     //alert(data); //debugging
     var record= JSON.parse(data);
     var editRow;
-    forEachMember( tables, function(table) {
-        if(!(editRow && editRow.length)) editRow= table.children('tr.input_row.hidden');
+    forEachMember( tables, function(tb) {
+        if(!(editRow && editRow.length)) editRow= tb.children('tr.input_row.hidden');
     });
     var recTableBody= editRow.parent();
     var displayRow= templateRow(recTableBody).clone().removeClass('template_row').insertAfter(editRow);
@@ -71,8 +71,15 @@ function addDataRow(table) {
 function decimal(number) {
     return number.toFixed(2);
 }
+function remote(URL){
+    return $.ajax({ type: "GET", url: URL, async: false}).responseText;
+}
+function updateFurnizori(){
+    serverData.furnizori= JSON.parse(remote('../index.php/table/get-furnizori-json'));
+}
+//add a "record" (display) row with given record (object) values
 function displayRecord(record) {
-    var tip= this;
+    var tip= this; //"this" points to a string representing the ID of the BODY's parent table minus the "table_" prefix
     var addedRow= addDataRow(tables[tip]);
     setRowValues(addedRow, furnizor(record.IDFurnizor, tip),
         record.Factura, record.Chitanta, decimal(record.Suma));
@@ -89,51 +96,82 @@ function inputRowVal(tr, nth) {
 function furnizor(id, tip) {
     return serverData.furnizori[tip][id];
 }
+function clearInputRowValues(tb){
+    inputRow(tb).find('input').val(null);
+}
 //ajax callback for requestNewRecord
 function recordAdded(data) {
-    displayRecord(JSON.parse(data));
+
+    //get updated "furnizori" data from server
+    updateFurnizori();
+
+    //set the target method's "this" to "currentTableType" (record-table ID without prefix)
+    displayRecord.call( currentTableType, JSON.parse(data) );
 }
 //sends the data for a new record for the 3 similar 4-column vertical tables
 function requestNewRecord() {
-    console.log('posting marfa');
+    //console.log('posting marfa');
     var tr = $(this).parent().parent();
-    var tip = tr.parent().parent()[0].id.substr(6);
+    window.currentTableType = tr.parent().parent()[0].id.substr(6);
     //alert(jso2string(serverData.furnizori['MarfaTVA9']));
     var data= { 'Furnizor': inputRowVal(tr, 0), 'Factura': inputRowVal(tr, 1),
         'Chitanta': inputRowVal(tr, 2), 'Suma': inputRowVal(tr, 3), 'IDZi': serverData.zi.ID };
-    alert(tip+'\n'+jso2string(data));
-    $.post('../index.php/action/add_record/Sume'+tip, data, recordAdded);
+    //alert(tip+'\n'+jso2string(data));
+    clearInputRowValues(tables[currentTableType]);
+    $.post('../index.php/action/add_record/Sume'+currentTableType, data, recordAdded);
+}
+//clear display (record) rows from record tables - used before populating the tables
+function clearRecordTables(){
+    forEachMember(tables, function(table, name){
+        table.children('tr:not(.input_row):not(.template_row):not(.totals_row)').remove();
+    });
+}
+//update text of TD elements of table "cumuli" with the data passed from the server
+function displayCumuli(){
+    cumuli.eq(0).text(decimal(serverData.cumuli.soldinitial));
+    cumuli.eq(1).text(decimal(serverData.cumuli.chelt));
+    cumuli.eq(2).text(decimal(serverData.cumuli.tva24));
+    cumuli.eq(3).text(decimal(serverData.cumuli.tva9));
+    cumuli.eq(4).text(decimal(serverData.cumuli.aport));
 }
 //populate page tables, etc. with data
-function popPage(){
+function populatePage(){
+    clearRecordTables();
     Object.keys(tables).forEach(function(tip){
         tables[tip].children('tr:not(.template_row):not(.input_row):not(.totals_row)').remove();
         serverData[tip].forEach(displayRecord, tip); //'tip' will be accessible as 'this'
     });
-    cumuli.eq(0).text(decimal(serverData.cumuli.soldinitial));
-    cumuli.eq(1).text(decimal(serverData.cumuli.total_chelt));
-    cumuli.eq(2).text(decimal(serverData.cumuli.total_tva24));
-    cumuli.eq(3).text(decimal(serverData.cumuli.total_tva9));
-    cumuli.eq(4).text(decimal(serverData.cumuli.total_aport));
+    displayCumuli();
     datatitlu.text(serverData.zi.Data);
 }
 function getTables(){
     window.tables= {};
-    tables['MarfaTVA9']= {};
-    tables['MarfaTVA24']= {};
-    tables['Cheltuieli']= {};
+    ['MarfaTVA9', 'MarfaTVA24', 'Cheltuieli'].forEach(function(tableName){
+       tables[tableName]={};
+    });
     Object.keys(tables).forEach(function(tip){
         tables[tip]= $('#tabel_'+tip).children('tbody');
     });
 }
+//calls a callback function func with parameters "value"[, "memberName"[, "object"]] for each member of "object"
 function forEachMember( Obj, func){
     Object.keys(Obj).forEach(function(key){
         func(Obj[key], key, Obj);
     });
 }
+function recordsReturned(jso){
+    serverData= JSON.parse(jso);
+    populatePage();
+}
 function datePicked(dateChange){
-    datatitlu.text(datePicker.data('DateTimePicker').viewDate().format('LLL'));
+
+    //display the selected date in the title
+    datatitlu.text(datePicker.data('DateTimePicker').viewDate().format('DD.MM.YYYY'));
     //(datePicker.datetimepicker('getFormattedDate'));
+
+
+    $.post('../index.php/table/get-records-json/'+datePicker.data('DateTimePicker').viewDate().format('YYYY-MM-DD'),
+        null, recordsReturned);
 }
 function setupDates(){
 
@@ -147,6 +185,7 @@ function setupDates(){
     //set date picker date format
     datePicker.datetimepicker( {locale: 'ro', format: 'DD.MM.YYYY', defaultDate: maxDate} );
 
+    //disallow picking an invalid (not registered with the db) date
     datePicker.data("DateTimePicker").minDate(minDate).maxDate(maxDate);
 
 
@@ -157,12 +196,18 @@ function setupDates(){
     datatitlu.text(maxDate.toLocaleDateString('ro-RO')); //(dateInput.val());
     //datePicked(); //update the title date
 }
+//ajax callback: new date added
 function endDayDone(data){
+
+    //received date string won't contain leading zeroes, so reconstruct a Date object
     newLastDay = JSON.parse(data).new_last_day.split('-');
     newLastDay = new Date(newLastDay[0], newLastDay[1]-1, newLastDay[2]);
+
+    //update the datepicker to allow selecting the new day
     datePicker.data('DateTimePicker').maxDate(newLastDay);
 }
 function endDay(){
+    end_day.remove();
     $.post('../index.php/table/new_day', null, endDayDone);
 }
 function pageLoaded($) {
@@ -176,7 +221,7 @@ function pageLoaded($) {
 
     getTables();
 
-    popPage();
+    populatePage();
     forEachMember( tables, function(table){
         table.find('button').last().click(requestNewRecord);
     });
