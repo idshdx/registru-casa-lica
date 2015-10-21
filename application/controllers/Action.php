@@ -39,9 +39,9 @@ class Action extends CI_Controller {
      }
 
      public function edit_record($table, $id, $idzi) {
-         if( !isset($_SESSION['userdata']) ) {
+         /*if( !isset($_SESSION['userdata']) ) {
                   redirect("login");
-            } else {
+            } else {*/
               $post = $this->input->post();
               unset($post['Furnizor']);
 
@@ -56,23 +56,23 @@ class Action extends CI_Controller {
               $this->main_model->edit_record($table, $id, $post);
 
               echo json_encode($this->main_model->get_last_record($table));
-            }  
+             
      }
 
      public function delete_record($table, $id, $idzi) {
-            if( !isset($_SESSION['userdata']) ) {
+           /* if( !isset($_SESSION['userdata']) ) {
                   redirect("login");
-            } else {
+            } else {*/
                   $this->main_model->delete_record($table, $id, $idzi);
-            }
+            
             
      }
 
      public function edit_sold_initial($idzi, $sum) {
-            if( !isset($_SESSION['userdata']) ) {
+            /*if( !isset($_SESSION['userdata']) ) {
                   redirect("login");
-            } else {
+            } else {*/
                   $this->soldinitial_model->edit_sold_initial($idzi, $sum);
-            }
+            
      }
 }
