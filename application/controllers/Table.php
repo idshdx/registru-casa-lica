@@ -27,7 +27,7 @@ class Table extends CI_Controller {
           $records = $this->get_records($idzi);
           $records['totals'] = $this->get_total($idzi); 
 
-          $this->load->view('index', json_encode(['server_data'=>$records]));
+          $this->load->view('index', ['server_data' => json_encode($records) ]);
      }
 
      public function get_total_json($idzi) {
