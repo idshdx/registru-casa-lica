@@ -16,6 +16,11 @@
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/registru.js"></script>
 </head>
 <body>
+    <div class="hidden">
+        <datalist id="furnizori_MarfaTVA9"></datalist>
+        <datalist id="furnizori_MarfaTVA24"></datalist>
+        <datalist id="furnizori_Cheltuieli"></datalist>
+    </div>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -216,6 +221,5 @@
 		<br>
 	</div>
 	<footer><p>Copyright © 2015 SC LICA SRL. Toate drepturile rezervate.</p></footer>
-
 </body>
 </html>

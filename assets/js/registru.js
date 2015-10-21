@@ -210,6 +210,22 @@ function endDay(){
     end_day.remove();
     $.post('../index.php/table/new_day', null, endDayDone);
 }
+function update
+//update the input autocomplete lists
+function constructDatalistsFurnizori(){
+    var furnizor;
+    window.datalists= {};
+    Object.keys(tables).forEach(function(tip){
+        datalist= $('#furnizori_'+tip);
+        datalists[tip]= datalist;
+        datalist.empty();
+
+        Object.keys(serverData.furnizori[tip]).forEach(function(IDFurnizor){
+            furnizor= serverData.furnizori[tip][IDFurnizor];
+            datalist.append('<option value="'+furnizor+'">');
+        });
+    });
+}
 function pageLoaded($) {
 
     window.datatitlu= $('#datatitlu');
@@ -220,6 +236,8 @@ function pageLoaded($) {
     window.cumuli= $('#cumuli').children('td');
 
     getTables();
+
+    //console.log(datalists); //debugging
 
     populatePage();
     forEachMember( tables, function(table){
