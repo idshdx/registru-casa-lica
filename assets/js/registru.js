@@ -215,7 +215,7 @@ function pageLoaded($) {
     window.datatitlu= $('#datatitlu');
     setupDates();
 
-    window.end_day= $('#end_day').click(endDay);
+    window.end_day= $('#end_day').click(endDay); //the bottom button
 
     window.cumuli= $('#cumuli').children('td');
 
