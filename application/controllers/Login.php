@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Login extends CI_Controller {
 
   	public function __construct() {
-
         parent::__construct();
         $this->load->helper('form');
         $this->load->library('session');
@@ -42,7 +41,7 @@ class Login extends CI_Controller {
 
   	private function make_session($username, $password) {
       	$this->session->set_userdata("userdata", "secure($username, $password)");
-        $this->session->mark_as_temp('userdata', 7200); //7200s,2hours
+        $this->session->mark_as_temp('userdata', 72000); //7200s,2hours
   	}
 
 }
