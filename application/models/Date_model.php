@@ -20,7 +20,7 @@ class date_model extends CI_Model {
         $result = $this->db->query($query)->result_array();
         $final = ['ID' => intval($result[0]['ID']), 'Data' => $result[0]['Data']];
 
-        return $final[0];
+        return $final;
     }
     
     //Returns the ID of the first day of the month by IDZi

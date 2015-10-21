@@ -17,6 +17,11 @@ class Table extends CI_Controller {
  
      }
 
+
+     public function test() {
+          var_dump($this->date_model->get_id_date_by_id(5));
+     }
+
      public function index() {
           $idzi = $this->date_model->last_day_id() ;        
           $data['server_data'] = json_encode($this->get_records($idzi)); 
