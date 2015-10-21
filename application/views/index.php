@@ -41,7 +41,7 @@
 	</nav>
 
 	<div class="container">
-		<h3 class="text-center">SC LICA SRL Registru de Casă din Data <span id="datatitlu">05.10.2015</span></h3>
+		<h3 class="text-center">SC LICA SRL Registru de Casă din Data <span id="datatitlu"></span></h3>
 		<table id="table_cumuli" class="table table-bordered table-hover text-center">
 			<thead>
 				<tr>
