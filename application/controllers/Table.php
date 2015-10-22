@@ -34,10 +34,10 @@ class Table extends CI_Controller {
           echo json_encode($this->get_total($idzi));
      }
      private function get_total($idzi) {
-         return ['chelt'=>$this->calcul_model->get_amount_by_day('SumeCheltuieli', $idzi), 
-                    'tva9'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA9', $idzi),
-                    'tva24'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA24', $idzi), 
-                    'aport'=> $this->calcul_model->get_amount_by_day('SumeAport', $idzi)];
+         return ['Cheltuieli'=>$this->calcul_model->get_amount_by_day('SumeCheltuieli', $idzi), 
+                    'MarfaTVA9'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA9', $idzi),
+                    'MarfaTVA24'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA24', $idzi), 
+                    'Aport'=> $this->calcul_model->get_amount_by_day('SumeAport', $idzi)];
      }
 
      public function get_records_json($data) {
@@ -57,15 +57,18 @@ class Table extends CI_Controller {
           $first_date = $this->parsed_date_to_string($this->date_model->first_day_ever());     
           $furnizori = $this->get_furnizori();
 
-          $calcule = ['chelt' => floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi)),
-                      'tva9' => floatval($this->calcul_model->cumul('SumeMarfaTVA9', $idzi)), 
-                      'tva24' => floatval($this->calcul_model->cumul('SumeMarfaTVA24', $idzi)), 
-                      'aport' => floatval($this->calcul_model->cumul('SumeAport', $idzi)), 
+          $calcule = ['Cheltuieli' => floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi)),
+                      'MarfaTVA9' => floatval($this->calcul_model->cumul('SumeMarfaTVA9', $idzi)), 
+                      'MarfaTVA24' => floatval($this->calcul_model->cumul('SumeMarfaTVA24', $idzi)), 
+                      'Aport' => floatval($this->calcul_model->cumul('SumeAport', $idzi)), 
                       'soldinitial' => floatval($soldinitial) ];
           
-          return ['Cheltuieli' => $chelt, 'MarfaTVA9' => $marfa9, 
-                    'MarfaTVA24' => $marfa24, 'Aport' => $aport, 
-                    'zi' => $zi, 'first_date' => $first_date,
+          return ['Cheltuieli' => $chelt, 
+                    'MarfaTVA9' => $marfa9, 
+                    'MarfaTVA24' => $marfa24,
+                    'Aport' => $aport, 
+                    'zi' => $zi, 
+                    'first_date' => $first_date,
                     'furnizori' => $furnizori, 
                     'cumuli' => $calcule] ;
      }
