@@ -18,7 +18,7 @@ class Action extends CI_Controller {
     }
 
     public function index() {
-     var_dump($this->main_model->get_record_by_id('SumeMarfaTVA9',1));
+     var_dump($this->main_model->get_last_aport(5));
       
     }
 
@@ -40,7 +40,7 @@ class Action extends CI_Controller {
 
      public function add_aport($idzi, $suma) {
           $this->main_model->new_record($table, ['idzi'=> $idzi, 'Suma'=>$suma]);
-          echo json_encode($this->main_model->get_last_record($table));
+          echo json_encode($this->main_model->get_last_aport($idzi));
           
      }
 

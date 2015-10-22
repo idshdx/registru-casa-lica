@@ -34,6 +34,14 @@ class main_model extends CI_Model {
     	return $final;
     }
 
+    public function get_last_aport($idzi) {
+        $query = "SELECT * FROM SumeAport WHERE IDZi= $idzi";
+        $result = $this->db->query($query)->result_array()[0];
+        $final = ['ID' => (int)$result['ID'],'IDZi' => (int)$result['IDZi'], 'Suma' => (float)$result['Suma'] ];
+
+        return $final;
+    }
+
     //Fetch the ID of the last record
     public function get_last_record_id($table) {
     	$query = "SELECT ID from $table ORDER BY ID DESC LIMIT 1;";
