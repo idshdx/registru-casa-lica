@@ -18,6 +18,10 @@ function forEachMember( Obj, func){
     });
 }
 
+function subtractDPDecimals(dpDec1, dpDec2){
+    return (dpDec1*100 - dpDec2*100)/100;
+}
+
 /***
  * functions that retrieve / send data from / to the server
  */
@@ -75,6 +79,7 @@ function recordAdded(data) {
 
     //set the target method's "this" to "currentTableType" (record-table ID without prefix)
     displayRecord.call( currentTableType, JSON.parse(data) );
+    clearInputRowValues(tables[currentTableType]);
 }
 //sends the data for a new record for the 3 similar 4-column vertical tables
 function requestNewRecord() {
@@ -105,6 +110,23 @@ function endDay(){
 function getTotals(){
     //TODO: remote()
 }
+function displayAport(jsoAport){
+    aportTemplate.clone().insertBefore(inputAport.parent())
+        .removeClass('template_cell')
+        .text(decimal(jsoAport.Suma))
+        [0].dbid= jsoAport.ID;
+}
+function aportAdded(data){
+    //alert(data); //debugging
+    newAport= JSON.parse(data);
+    serverData.Aport.push(newAport);
+    displayAport(newAport);
+}
+function addAport(){
+    newAport= inputAport.val();
+    inputAport.val('');
+    $.post('../index.php/action/add_aport/'+serverData.zi.ID +'/' + newAport, null, aportAdded);
+}
 
 /***
  * DOM retrieval
@@ -129,6 +151,9 @@ function recordFromInputRow(row) {
 //retrieves nth input's value from "tr" (jQuery .input_row object)
 function inputRowVal(tr, nth) {
     return tr.children('td').eq(nth).children('input').val();
+}
+function aportCells(){
+    return trAport.children('td.display_cell');
 }
 
 /***
@@ -193,10 +218,25 @@ function displayCumuli(){
     cumuli.eq(4).text(decimal(serverData.cumuli.Aport));
 }
 function displayTotals(){
+    var totalPlati= 0;
     forEachMember(tables, function(table, tip){
         setRowValue(table.children('tr.totals_row'), 1, serverData.totals[tip]);
+        totalPlati+= serverData.totals[tip];
     });
     $('#total_Aport').text(serverData.totals.Aport);
+    $('#total_plati').text(totalPlati);
+    $('#total_sold_curent').text(serverData.cumuli.soldinitial + serverData.totals.Aport);
+    //in JS it is necessary to get rid of decimals in order for the subtraction to work as expected
+    var soldFinal= subtractDPDecimals(serverData.cumuli.soldinitial + serverData.totals.Aport, totalPlati);
+    $('#total_sold_final').text(soldFinal);
+}
+function displayAporturi(){
+    //clear current aportCells
+    aportCells().remove();
+    //display all aporturi in serverData.Aport
+    serverData.Aport.forEach(function(jsoAport){
+        displayAport(jsoAport);
+    });
 }
 //populate page tables, etc. with data
 function populatePage(){
@@ -204,6 +244,7 @@ function populatePage(){
     forEachMember(tables, function(table, tip){
         serverData[tip].forEach(displayRecord, tip); //'tip' will be accessible as 'this'
     });
+    displayAporturi();
     displayCumuli();
     datatitlu.text(serverData.zi.Data);
     displayTotals();
@@ -263,11 +304,8 @@ function decimal(number) {
 }
 function getTables(){
     window.tables= {};
-    ['MarfaTVA9', 'MarfaTVA24', 'Cheltuieli'].forEach(function(tableName){
-        tables[tableName]={};
-    });
-    Object.keys(tables).forEach(function(tip){
-        tables[tip]= $('#tabel_'+tip).children('tbody');
+    ['MarfaTVA9', 'MarfaTVA24', 'Cheltuieli'].forEach(function(tipPlata){
+        tables[tipPlata]= $('#tabel_'+tipPlata).children('tbody');
     });
 }
 
@@ -281,6 +319,9 @@ function pageLoaded($) {
     window.cumuli= $('#cumuli').children('td');
 
     getTables();
+    window.trAport= $('#tabel_Aport').children('tbody:first').children('tr:first');
+    window.inputAport= $('#input_aport');
+    window.aportTemplate= trAport.children('td.template_cell:first');
 
     //console.log(datalists); //debugging
 
@@ -288,6 +329,7 @@ function pageLoaded($) {
     forEachMember( tables, function(table){
         table.find('button').last().click(requestNewRecord);
     });
+    $('#new_aport').click(addAport);
 
     constructDatalistsFurnizori();
 

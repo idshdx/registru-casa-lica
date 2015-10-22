@@ -109,7 +109,7 @@ footer > p {
 thead>tr:first-child, tbody>tr:last-child{
     font-weight: bold;
 }
-.template_row{
+.template_row, .template_cell{
     display: none;
 }
 
