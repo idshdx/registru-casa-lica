@@ -61,7 +61,8 @@ class Table extends CI_Controller {
                       'MarfaTVA9' => floatval($this->calcul_model->cumul('SumeMarfaTVA9', $idzi)), 
                       'MarfaTVA24' => floatval($this->calcul_model->cumul('SumeMarfaTVA24', $idzi)), 
                       'Aport' => floatval($this->calcul_model->cumul('SumeAport', $idzi)), 
-                      'soldinitial' => floatval($soldinitial) ];
+                      'soldinitial' => floatval($soldinitial) - floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi))
+                      - floatval($this->calcul_model->cumul('SumeMarfaTVA24', $idzi)) + floatval($this->calcul_model->cumul('SumeAport', $idzi))];
           
           return ['Cheltuieli' => $chelt, 
                     'MarfaTVA9' => $marfa9, 
