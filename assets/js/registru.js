@@ -35,17 +35,19 @@ function recordUpdated(data) {
         if(!(editRow && editRow.length)) editRow= tb.children('tr.input_row.hidden');
     });
     var recTableBody= editRow.parent();
-    var displayRow= templateRow(recTableBody).clone().removeClass('template_row').insertAfter(editRow);
-    displayRow[0].dbid= record.ID;
-    setRowValues(displayRow, record.Furnizor, record.Factura, record.Chitanta, decimal(record.Suma));
+    var displayRow= templateRow().clone().removeClass('template_row').insertAfter(editRow);
+    displayRow[0].dbid= record.ID; //set record id to custom DOM TR property dbid
+    setRowValues(displayRow, serverData.furnizori[currentTableType][record.IDFurnizor],
+        record.Factura, record.Chitanta, decimal(record.Suma));
     editRow.remove();
 }
 function requestRecordUpdate() {
     var tr= $(this).parent().parent();
     var record= recordFromInputRow(tr);
     tr.addClass('hidden');
-    var tip= tr.parent().parent()[0].id.substr(6);
-    $.post( '../index.php/action/edit_record/Sume'+tip+'/'+tr[0].dbid+'/'+serverData.zi.ID, record, recordUpdated );
+    currentTableType= tr.parent().parent()[0].id.substr(6);
+    $.post( '../index.php/action/edit_record/Sume' + currentTableType + '/' + tr[0].dbid + '/' + serverData.zi.ID,
+        record, recordUpdated );
 }
 function recordsReturned(jso){
     serverData= JSON.parse(jso);
@@ -107,8 +109,8 @@ function getTotals(){
 /***
  * DOM retrieval
  */
-function templateRow(tb) {
-    return tb.children('tr.template_row');
+function templateRow() {
+    return tables['MarfaTVA9'].children('tr.template_row');
 }
 function inputRow(tb) {
     return tb.children('tr.input_row').last();
@@ -178,7 +180,7 @@ function clearInputRowValues(tb){
 }
 //clear display (record) rows from record tables - used before populating the tables
 function clearRecordTables(){
-    forEachMember(tables, function(table, name){
+    forEachMember(tables, function(table){
         table.children('tr:not(.input_row):not(.template_row):not(.totals_row)').remove();
     });
 }
@@ -193,8 +195,7 @@ function displayCumuli(){
 //populate page tables, etc. with data
 function populatePage(){
     clearRecordTables();
-    Object.keys(tables).forEach(function(tip){
-        tables[tip].children('tr:not(.template_row):not(.input_row):not(.totals_row)').remove();
+    forEachMember(tables, function(table, tip){
         serverData[tip].forEach(displayRecord, tip); //'tip' will be accessible as 'this'
     });
     displayCumuli();
