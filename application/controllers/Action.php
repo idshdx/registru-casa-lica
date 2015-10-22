@@ -18,7 +18,7 @@ class Action extends CI_Controller {
     }
 
     public function index() {
-     var_dump($this->furnizori_model->last_furnizor());
+     var_dump($this->main_model->get_record_by_id('SumeMarfaTVA9',1));
       
     }
 
@@ -53,7 +53,8 @@ class Action extends CI_Controller {
               if($idfurnizor == 0) $idfurnizor = $this->furnizori_model->new_furnizor($tip_furnizor, $furnizor);  
               $post['IDFurnizor'] = $idfurnizor;
 
-              echo json_encode($this->main_model->edit_record($table, $id, $post));       
+              $this->main_model->edit_record($table, $id, $post);
+              echo json_encode($this->main_model->get_record_by_id($table, $id));       
              
      }
 

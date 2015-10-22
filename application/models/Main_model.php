@@ -43,6 +43,16 @@ class main_model extends CI_Model {
     	return intval($result[0]);
     }
 
+    //Fetch the ID of the specified record
+    public function get_record_by_id($table, $id) {
+        $query = "SELECT * from $table WHERE ID = $id ;";
+
+        $result = $this->db->query($query)->result_array()[0];
+        $final = ['ID'=> (int)$result['ID'], 'IDZi'=> (int)$result['IDZi'], 'Suma'=> (float)$result['Suma'],
+                 'IDFurnizor'=> (int)$result['IDFurnizor'], 'Factura'=> $result['Factura'], 'Chitanta'=> $result['Chitanta']];
+        return $final;
+    }
+
     public function new_record($table, $data) {
          $this->db->insert($table, $data);
 	}
