@@ -187,13 +187,13 @@
 			</tbody>
 		</table>
 
-		<table class="table table-bordered table-hover text-center">
+		<table id="tabel_Aport" class="table table-bordered table-hover text-center">
 			<tbody>
 				<tr>
 					<td>Monetare / Aport Capital</td>
 					<td><input class="form-control screen usr-input" type="text"></td>
 					<td>Sold Total Încasări</td>
-					<td>99999.99</td>
+					<td id="total_Aport">99999.99</td>
 					<td class="screen">
                         <button class="btn btn-success btn-sm">
                             <span class="glyphicon glyphicon-plus"></span> Salvează

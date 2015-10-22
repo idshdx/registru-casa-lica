@@ -103,7 +103,7 @@ function endDay(){
     $.post('../index.php/table/new_day', null, endDayDone);
 }
 function getTotals(){
-    remote()
+    //TODO: remote()
 }
 
 /***
@@ -192,6 +192,12 @@ function displayCumuli(){
     cumuli.eq(3).text(decimal(serverData.cumuli.MarfaTVA9));
     cumuli.eq(4).text(decimal(serverData.cumuli.Aport));
 }
+function displayTotals(){
+    forEachMember(tables, function(table, tip){
+        setRowValue(table.children('tr.totals_row'), 1, serverData.totals[tip]);
+    });
+    $('#total_Aport').text(serverData.totals.Aport);
+}
 //populate page tables, etc. with data
 function populatePage(){
     clearRecordTables();
@@ -246,11 +252,6 @@ function constructDatalistsFurnizori(){
         datalists[tip]= datalist;
         datalist.empty();
         updateFurnizoriDatalist(tip);
-    });
-}
-function displayTotals(){
-    forEachMember(tables, function(table, tip){
-        setRowValue(table.children('tr.totals_row'), 1, serverData.totals[tip]);
     });
 }
 
