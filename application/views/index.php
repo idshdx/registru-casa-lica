@@ -91,7 +91,7 @@
                     </td>
 				</tr>
 				<tr class="input_row screen">
-					<td><input class="form-control usr-input" type="text"></td>
+					<td><input class="form-control usr-input" type="text" list="furnizori_MarfaTVA9"></td>
 					<td><input class="form-control usr-input" type="text"></td>
 					<td><input class="form-control usr-input" type="text"></td>
 					<td><input class="form-control usr-input" type="text"></td>
@@ -134,7 +134,7 @@
 					<td><input class="form-control usr-input" type="text"></td>
 					<td><input class="form-control usr-input" type="text"></td>
 					<td><input class="form-control usr-input" type="text"></td>
-					<td><input class="form-control usr-input" type="text"></td>
+					<td><input class="form-control usr-input" type="text" list="furnizori_MarfaTVA24"></td>
 					<td>
                         <button class="btn btn-success btn-sm">
                             <span class="glyphicon glyphicon-plus"></span> Salvează
@@ -174,7 +174,7 @@
 					<td><input class="form-control usr-input" type="text"></td>
 					<td><input class="form-control usr-input" type="text"></td>
 					<td><input class="form-control usr-input" type="text"></td>
-					<td><input class="form-control usr-input" type="text"></td>
+					<td><input class="form-control usr-input" type="text" list="furnizori_Cheltuieli"></td>
 					<td><button class="btn btn-success btn-sm">
                             <span class="glyphicon glyphicon-plus"></span> Salvează
                         </button>
