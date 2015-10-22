@@ -18,7 +18,7 @@ class Action extends CI_Controller {
     }
 
     public function index() {
-     var_dump($this->main_model->get_last_aport(2));
+     var_dump($this->main_model->get_last_aport(5));
       
     }
 
