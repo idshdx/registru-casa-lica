@@ -38,6 +38,12 @@ class Action extends CI_Controller {
           
      }
 
+     public function add_aport($idzi, $suma) {
+          $this->main_model->new_record($table, ['idzi'=> $idzi, 'Suma'=>$suma]);
+          echo json_encode($this->main_model->get_last_record($table));
+          
+     }
+
      public function edit_record($table, $id, $idzi) {
          /*if( !isset($_SESSION['userdata']) ) {
                   redirect("login");
