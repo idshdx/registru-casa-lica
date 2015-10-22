@@ -44,6 +44,7 @@ function recordUpdated(data) {
     setRowValues(displayRow, serverData.furnizori[currentTableType][record.IDFurnizor],
         record.Factura, record.Chitanta, decimal(record.Suma));
     editRow.remove();
+    updateTotals();
 }
 function requestRecordUpdate() {
     var tr= $(this).parent().parent();
@@ -80,6 +81,7 @@ function recordAdded(data) {
     //set the target method's "this" to "currentTableType" (record-table ID without prefix)
     displayRecord.call( currentTableType, JSON.parse(data) );
     clearInputRowValues(tables[currentTableType]);
+    updateTotals();
 }
 //sends the data for a new record for the 3 similar 4-column vertical tables
 function requestNewRecord() {
@@ -108,7 +110,7 @@ function endDay(){
     $.post('../index.php/table/new_day', null, endDayDone);
 }
 function getTotals(){
-    //TODO: remote()
+    serverData.totals= JSON.parse(remote('../index.php/table/get-total-json/'+serverData.zi.ID));
 }
 function displayAport(jsoAport){
     aportTemplate.clone().insertBefore(inputAport.parent())
@@ -126,6 +128,10 @@ function addAport(){
     newAport= inputAport.val();
     inputAport.val('');
     $.post('../index.php/action/add_aport/'+serverData.zi.ID +'/' + newAport, null, aportAdded);
+}
+function updateTotals(){
+    getTotals();
+    displayTotals();
 }
 
 /***
