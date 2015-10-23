@@ -17,18 +17,21 @@ function forEachMember( Obj, func){
         func(Obj[key], key, Obj);
     });
 }
-
 function subtractDPDecimals(dpDec1, dpDec2){
     return (dpDec1*100 - dpDec2*100)/100;
 }
-
 function showHide(jQ, display){
     if(display) jQ.removeClass('hidden'); else jQ.addClass('hidden');
 }
-
 function cookieExists(name){
     alert(jso2string(document.cookie));
     return document.cookie.indexOf(name)>=0;
+}
+function redirect(url){
+    location.assign(url);
+}
+function reloadDocument(){
+    location.reload(true);
 }
 
 /***
@@ -40,14 +43,15 @@ function remote(URL){
 }
 function recordUpdated(data) {
     updateFurnizori();
-    printJSO(serverData);
+    //printJSO(serverData);
     //alert(data); //debugging
     var record= JSON.parse(data);
+    //console.log(record);
     var editRow;
     forEachMember( tables, function(tb) {
         if(!(editRow && editRow.length)) editRow= tb.children('tr.input_row.hidden');
     });
-    var recTableBody= editRow.parent();
+    //var recTableBody= editRow.parent();
     var displayRow= templateRow().clone().removeClass('template_row').insertAfter(editRow);
     displayRow[0].dbid= record.ID; //set record id to custom DOM TR property dbid
     setRowValues(displayRow, serverData.furnizori[currentTableType][record.IDFurnizor],
@@ -56,6 +60,7 @@ function recordUpdated(data) {
     updateTotals();
 }
 function requestRecordUpdate() {
+    if(!editAllowed()) return logOut();
     var tr= $(this).parent().parent();
     var record= recordFromInputRow(tr);
     tr.addClass('hidden');
@@ -65,25 +70,16 @@ function requestRecordUpdate() {
 }
 function recordsReturned(jso){
     serverData= JSON.parse(jso);
+    console.log(serverData);
     populatePage();
+    editMode(editAllowed());
 }
 function datePicked(dateChange){
 
-    var selDateData= datePicker.data('DateTimePicker');
-    var selDateMoment= selDateData.viewDate();
-    var selDate= selDateMoment.format('l');
-    var selDateISO= selDateMoment.format('YYYY-MM-DD');
-    var maxDate= selDateData.maxDate().format('l');
-
     //display the selected date in the title
-    datatitlu.text(datePicker.data('DateTimePicker').viewDate().format('DD.MM.YYYY'));
+    datatitlu.text(datePicker.data('DateTimePicker').viewDate().format('l'));
 
-    $.post('../index.php/table/get-records-json/' + selDateISO, null, recordsReturned);
-    //alert(maxDate);
-    //alert( adminUser());
-    var allowEdit= selDate==maxDate || userAdmin;
-    editMode(allowEdit);
-    showHide(end_day, allowEdit);
+    $.post('../index.php/table/get-records-json/' + selectedDateISO(), null, recordsReturned);
 }
 function updateFurnizori(){
     serverData.furnizori= JSON.parse(remote('../index.php/table/get-furnizori-json'));
@@ -102,6 +98,7 @@ function recordAdded(data) {
 }
 //sends the data for a new record for the 3 similar 4-column vertical tables
 function requestNewRecord() {
+    if(!editAllowed()) return logOut();
     //console.log('posting marfa');
     var tr = $(this).parent().parent();
     window.currentTableType = tr.parent().parent()[0].id.substr(6);
@@ -123,6 +120,7 @@ function endDayDone(data){
     datePicker.data('DateTimePicker').maxDate(newLastDay);
 }
 function endDay(){
+    if(!editAllowed()) return logOut();
     end_day.remove();
     $.post('../index.php/table/new_day', null, endDayDone);
 }
@@ -139,9 +137,11 @@ function aportAdded(data){
     //alert(data); //debugging
     newAport= JSON.parse(data);
     serverData.Aport.push(newAport);
+    console.log(serverData);
     displayAport(newAport);
 }
 function addAport(){
+    if(!editAllowed()) return logOut();
     newAport= inputAport.val();
     inputAport.val('');
     $.post('../index.php/action/add_aport/'+serverData.zi.ID +'/' + newAport, null, aportAdded);
@@ -177,6 +177,9 @@ function inputRowVal(tr, nth) {
 }
 function aportCells(){
     return trAport.children('td.display_cell');
+}
+function selectedDateISO(){
+    return datePicker.data('DateTimePicker').viewDate().format('YYYY-MM-DD');
 }
 
 /***
@@ -320,6 +323,7 @@ function constructDatalistsFurnizori(){
 }
 function editMode(enable){
     showHide($('.input_row,.input_cell,.action'), enable);
+    showHide(end_day, enable);
 }
 
 /***
@@ -334,10 +338,18 @@ function getTables(){
         tables[tipPlata]= $('#tabel_'+tipPlata).children('tbody');
     });
 }
+function session(){
+    return remote('../index.php/table/session-check-echo/'+serverData.zi.ID).trim() != '';
+}
+function editAllowed(){
+    return selectedDateISO()==serverData.zi.ID || session();
+}
+function logOut(){
+    redirect('../index.php/login');
+}
 
+//set global variables; the order of some of the function calls matters;
 function pageLoaded($) {
-
-    window.userAdmin= serverData.loggedin;
 
     window.datatitlu= $('#datatitlu');
     setupDates();
@@ -354,14 +366,15 @@ function pageLoaded($) {
     //console.log(datalists); //debugging
 
     populatePage();
+
+    //bindings
+    $('#new_aport').click(addAport);
     forEachMember( tables, function(table){
         table.find('button').last().click(requestNewRecord);
     });
-    $('#new_aport').click(addAport);
 
     constructDatalistsFurnizori();
 
-    printJSO(serverData);
     console.log(window.serverData);
 }
 jQuery(pageLoaded);

@@ -12,6 +12,7 @@
     <title>Registru de Casă</title>
     <script>
         serverData= <?php echo $server_data ?>;
+        URLRoot= '<?php echo base_url(); ?>';
     </script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/registru.js"></script>
 </head>

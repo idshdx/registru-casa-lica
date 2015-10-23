@@ -87,7 +87,7 @@ class Table extends CI_Controller {
      }
 
 
-     public function new_day() {
+     public function new_day(){
           //insert the next date
           $this->date_model->new_day(); 
           // echo the new date inserted
