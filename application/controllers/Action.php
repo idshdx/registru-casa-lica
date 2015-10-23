@@ -45,9 +45,7 @@ class Action extends CI_Controller {
      }
 
      public function edit_record($table, $id, $idzi) {
-         if( !isset($_SESSION['userdata']) && last_day_id != $idzi) {
-                  redirect("login");
-            } else {
+              $this->session_check();
               $post = $this->input->post();
               unset($post['Furnizor']);
 
@@ -81,4 +79,10 @@ class Action extends CI_Controller {
                   $this->soldinitial_model->edit_sold_initial($idzi, $sum);
             
      }
+
+    public function session_check() {
+      if( !isset($_SESSION['userdata']) && last_day_id != $idzi) {
+                  redirect("login");
+      }
+    }
 }
