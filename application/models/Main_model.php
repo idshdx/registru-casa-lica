@@ -81,7 +81,4 @@ class main_model extends CI_Model {
     public function __destruct() {
         $this->db->close();
     }
-
-    
-
 }

@@ -25,6 +25,7 @@ class Table extends CI_Controller {
      public function index() {
           $idzi = $this->date_model->last_day_id() ;        
           $records = $this->get_records($idzi);
+          $records['loggedin'] = $this->session_check($idzi);
           $this->load->view('index', ['server_data' => json_encode($records) ]);
      }
 
@@ -98,4 +99,11 @@ class Table extends CI_Controller {
           return  join('-', [$date['year'], $date['month'], $date['day'] ] );
      }
 
+     private function session_check($idzi) {
+      return isset($_SESSION['userdata']) || $this->date_model->last_day_id() == $idzi;
+    }
+
+    public function session_check_echo($idzi) {
+     echo $this->session_check($idzi);
+    }
 }
