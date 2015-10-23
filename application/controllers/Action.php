@@ -65,7 +65,7 @@ class Action extends CI_Controller {
      }
 
      public function delete_record($table, $id, $idzi) {
-         if(!$this->session_check($idzi)) return;
+        if(!$this->session_check($idzi)) return;
         $this->main_model->delete_record($table, $id, $idzi);      
      }
 
@@ -75,7 +75,7 @@ class Action extends CI_Controller {
             
      }
 
-    public function session_check($idzi) {
+     private function session_check($idzi) {
       return isset($_SESSION['userdata']) || $this->date_model->last_day_id() == $idzi;
     }
 }
