@@ -22,6 +22,15 @@ function subtractDPDecimals(dpDec1, dpDec2){
     return (dpDec1*100 - dpDec2*100)/100;
 }
 
+function showHide(jQ, display){
+    if(display) jQ.removeClass('hidden'); else jQ.addClass('hidden');
+}
+
+function cookieExists(name){
+    alert(jso2string(document.cookie));
+    return document.cookie.indexOf(name)>=0;
+}
+
 /***
  * functions that retrieve / send data from / to the server
  */
@@ -60,13 +69,21 @@ function recordsReturned(jso){
 }
 function datePicked(dateChange){
 
+    var selDateData= datePicker.data('DateTimePicker');
+    var selDateMoment= selDateData.viewDate();
+    var selDate= selDateMoment.format('l');
+    var selDateISO= selDateMoment.format('YYYY-MM-DD');
+    var maxDate= selDateData.maxDate().format('l');
+
     //display the selected date in the title
     datatitlu.text(datePicker.data('DateTimePicker').viewDate().format('DD.MM.YYYY'));
-    //(datePicker.datetimepicker('getFormattedDate'));
 
-
-    $.post('../index.php/table/get-records-json/'+datePicker.data('DateTimePicker').viewDate().format('YYYY-MM-DD'),
-        null, recordsReturned);
+    $.post('../index.php/table/get-records-json/' + selDateISO, null, recordsReturned);
+    //alert(maxDate);
+    //alert( adminUser());
+    var allowEdit= selDate==maxDate || userAdmin;
+    editMode(allowEdit);
+    showHide(end_day, allowEdit);
 }
 function updateFurnizori(){
     serverData.furnizori= JSON.parse(remote('../index.php/table/get-furnizori-json'));
@@ -229,12 +246,12 @@ function displayTotals(){
         setRowValue(table.children('tr.totals_row'), 1, serverData.totals[tip]);
         totalPlati+= serverData.totals[tip];
     });
-    $('#total_Aport').text(serverData.totals.Aport);
-    $('#total_plati').text(totalPlati);
-    $('#total_sold_curent').text(serverData.cumuli.soldinitial + serverData.totals.Aport);
+    $('#total_Aport').text(decimal(serverData.totals.Aport));
+    $('#total_plati').text(decimal(totalPlati));
+    $('#total_sold_curent').text(decimal(serverData.cumuli.soldinitial + serverData.totals.Aport));
     //in JS it is necessary to get rid of decimals in order for the subtraction to work as expected
     var soldFinal= subtractDPDecimals(serverData.cumuli.soldinitial + serverData.totals.Aport, totalPlati);
-    $('#total_sold_final').text(soldFinal);
+    $('#total_sold_final').text(decimal(soldFinal));
 }
 function displayAporturi(){
     //clear current aportCells
@@ -301,6 +318,9 @@ function constructDatalistsFurnizori(){
         updateFurnizoriDatalist(tip);
     });
 }
+function editMode(enable){
+    showHide($('.input_row,.input_cell,.action'), enable);
+}
 
 /***
  * data & logic
@@ -316,6 +336,8 @@ function getTables(){
 }
 
 function pageLoaded($) {
+
+    window.userAdmin= serverData.loggedin;
 
     window.datatitlu= $('#datatitlu');
     setupDates();

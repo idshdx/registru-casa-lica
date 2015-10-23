@@ -192,10 +192,10 @@
 				<tr>
                     <td class="template_cell display_cell"></td>
 					<td>Monetare / Aport Capital</td>
-					<td><input id="input_aport" class="form-control screen usr-input" type="text"></td>
+					<td class="input_cell"><input id="input_aport" class="form-control screen usr-input" type="text"></td>
 					<td>Sold Total Încasări</td>
 					<td id="total_Aport">99999.99</td>
-					<td class="screen">
+					<td class="screen action">
                         <button id="new_aport" class="btn btn-success btn-sm">
                             <span class="glyphicon glyphicon-plus"></span> Salvează
                         </button>
