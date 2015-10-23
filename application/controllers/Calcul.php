@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class calcul extends CI_Controller {
 
 	public function __construct() {
-
     parent::__construct();
     $this->load->helper('form');
     $this->load->library('session');
@@ -19,7 +18,7 @@ class calcul extends CI_Controller {
   }
 
   public function index($idzi) {
-    echo json_encode(['total_chelt' => $this->total_chelt($idzi),'total_tva9' => $this->total_tva9($idzi), 
+    echo json_encode(['Cheltuieli' => $this->total_chelt($idzi),'total_tva9' => $this->total_tva9($idzi), 
                       'total_tva24' => $this->total_tva24($idzi), 'total_aport' => $this->total_aport($idzi)]);
   }
 
