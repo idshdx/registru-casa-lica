@@ -81,7 +81,7 @@ class Action extends CI_Controller {
      }
 
     public function session_check() {
-      if( !isset($_SESSION['userdata']) && last_day_id != $idzi) {
+      if( !isset($_SESSION['userdata']) && $this->date_model->last_day_id() != $idzi) {
                   redirect("login");
       }
     }
