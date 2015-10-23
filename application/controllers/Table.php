@@ -100,10 +100,10 @@ class Table extends CI_Controller {
      }
 
      private function session_check($idzi) {
-      return isset($_SESSION['userdata']) || $this->date_model->last_day_id() == $idzi;
+          return isset($_SESSION['userdata']) || $this->date_model->last_day_id() == $idzi;
     }
 
     public function session_check_echo($idzi) {
-     echo $this->session_check($idzi);
+          echo $this->session_check($idzi);
     }
 }
