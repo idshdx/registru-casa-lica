@@ -17,7 +17,7 @@ function forEachMember( Obj, func){
         func(Obj[key], key, Obj);
     });
 }
-function subtractDPDecimals(dpDec1, dpDec2){
+function subtractDecimals(dpDec1, dpDec2){
     return (dpDec1*100 - dpDec2*100)/100;
 }
 function showHide(jQ, display){
@@ -42,7 +42,7 @@ function remote(URL){
     return $.ajax({ type: "GET", url: URL, async: false}).responseText;
 }
 function recordUpdated(data) {
-    updateFurnizori();
+    updateFurnizori();'../index.php/table/get-records-json/' + selectedDateISO()
     //printJSO(serverData);
     //alert(data); //debugging
     var record= JSON.parse(data);
@@ -150,6 +150,13 @@ function updateTotals(){
     getTotals();
     displayTotals();
 }
+function requestNewSoldInitial(){
+    var output= remote('../index.php/action/edit-sold-initial/'+serverData.zi.ID+'/'+$('#edit_sold_initial').val());
+    if(output.trim()!='') alert(output); //debugging
+    serverData= JSON.parse( remote('../index.php/table/get-records-json/'+selectedDateISO()) );
+    populatePage();
+    $('#sold_initial_popup').modal('hide');
+}
 
 /***
  * DOM retrieval
@@ -162,7 +169,7 @@ function inputRow(tb) {
 }
 function recordFromInputRow(row) {
     var inputs= row.children('td').children('input');
-    var record={  }; // { ID: row[0].dbid }
+    var record= {  }; // { ID: row[0].dbid }
     record['Furnizor']= inputs.eq(0).val();
     var value= inputs.eq(1).val();
     if(value!='') record['Factura']= value;
@@ -253,16 +260,14 @@ function displayTotals(){
     $('#total_plati').text(decimal(totalPlati));
     $('#total_sold_curent').text(decimal(serverData.cumuli.soldinitial + serverData.totals.Aport));
     //in JS it is necessary to get rid of decimals in order for the subtraction to work as expected
-    var soldFinal= subtractDPDecimals(serverData.cumuli.soldinitial + serverData.totals.Aport, totalPlati);
+    var soldFinal= subtractDecimals(serverData.cumuli.soldinitial + serverData.totals.Aport, totalPlati);
     $('#total_sold_final').text(decimal(soldFinal));
 }
 function displayAporturi(){
     //clear current aportCells
     aportCells().remove();
     //display all aporturi in serverData.Aport
-    serverData.Aport.forEach(function(jsoAport){
-        displayAport(jsoAport);
-    });
+    serverData.Aport.forEach(displayAport);
 }
 //populate page tables, etc. with data
 function populatePage(){
@@ -338,18 +343,29 @@ function getTables(){
         tables[tipPlata]= $('#tabel_'+tipPlata).children('tbody');
     });
 }
-function session(){
-    return remote('../index.php/table/session-check-echo/'+serverData.zi.ID).trim() != '';
+function loggedIn(){
+    return remote('../index.php/action/loggedin').trim() != '';
 }
 function editAllowed(){
-    return selectedDateISO()==serverData.zi.ID || session();
+    return selectedDateISO()==serverData.zi.ID || loggedIn();
 }
 function logOut(){
     redirect('../index.php/login');
 }
+function dayOfMonth(){
+    return datePicker.data('DateTimePicker').viewDate().date();
+}
+function editSoldInitial(){
+    if(!( dayOfMonth()==1 && loggedIn() )) return;
+    $('#edit_sold_initial').val(sold_initial.text());
+    $('#sold_initial_popup').modal();
+}
 
 //set global variables; the order of some of the function calls matters;
 function pageLoaded($) {
+
+    window.sold_initial= $('#sold_initial');
+    sold_initial.click(editSoldInitial);
 
     window.datatitlu= $('#datatitlu');
     setupDates();
@@ -372,6 +388,8 @@ function pageLoaded($) {
     forEachMember( tables, function(table){
         table.find('button').last().click(requestNewRecord);
     });
+
+    $('#request_new_sold_initial').click(requestNewSoldInitial);
 
     constructDatalistsFurnizori();
 
