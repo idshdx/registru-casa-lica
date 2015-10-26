@@ -219,6 +219,9 @@
 			<button id="end_day" class="btn btn-primary save">
                 <span class="glyphicon glyphicon-ok"></span> Salvează Registru
             </button>
+            <button class="btn btn-primary print">
+                <span class="glyphicon glyphicon-print"></span> Imprimă
+            </button>
 		</div>
 		<br>
 	</div>

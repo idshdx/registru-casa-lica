@@ -42,7 +42,8 @@ function remote(URL){
     return $.ajax({ type: "GET", url: URL, async: false}).responseText;
 }
 function recordUpdated(data) {
-    updateFurnizori();'../index.php/table/get-records-json/' + selectedDateISO()
+    updateFurnizori();
+    //getRecords()?
     //printJSO(serverData);
     //alert(data); //debugging
     var record= JSON.parse(data);
@@ -73,6 +74,7 @@ function recordsReturned(jso){
     console.log(serverData);
     populatePage();
     editMode(editAllowed());
+    showHide(printButton, !isCurrentDate())
 }
 function datePicked(dateChange){
 
@@ -187,6 +189,9 @@ function aportCells(){
 }
 function selectedDateISO(){
     return datePicker.data('DateTimePicker').viewDate().format('YYYY-MM-DD');
+}
+function showPrint(){
+    //TODO
 }
 
 /***
@@ -346,8 +351,11 @@ function getTables(){
 function loggedIn(){
     return remote('../index.php/action/loggedin').trim() != '';
 }
+function isCurrentDate(){
+    return selectedDateISO()==serverData.zi.Data;
+}
 function editAllowed(){
-    return selectedDateISO()==serverData.zi.ID || loggedIn();
+    return isCurrentDate() || loggedIn();
 }
 function logOut(){
     redirect('../index.php/login');
@@ -390,6 +398,8 @@ function pageLoaded($) {
     });
 
     $('#request_new_sold_initial').click(requestNewSoldInitial);
+    window.printButton= $('#sold_initial_popup').find('button.print');
+    printButton.click(window.print);
 
     constructDatalistsFurnizori();
 
