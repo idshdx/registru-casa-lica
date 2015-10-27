@@ -81,6 +81,6 @@ class Action extends CI_Controller {
     }
 
     public function loggedin() {
-      return isset($_SESSION['userdata']);
+      echo isset($_SESSION['userdata']);
     }
 }
