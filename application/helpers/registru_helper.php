@@ -8,6 +8,10 @@
 	function secure($username, $password) {
 		return md5($username.$password.date('Y-m-d') );
 	}
+
+	function loggedin() {
+      return isset($_SESSION['userdata']);
+    }
 	
 ?>
 

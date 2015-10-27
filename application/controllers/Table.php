@@ -71,7 +71,7 @@ class Table extends CI_Controller {
                     'furnizori' => $furnizori, 
                     'cumuli' => $calcule,
                     'totals' => $this->get_total($idzi),
-                    'loggedin' => $this->session_check($idzi) ] ;
+                    'loggedin' => loggedin() ] ;
      }
 
      public function get_furnizori_json() {

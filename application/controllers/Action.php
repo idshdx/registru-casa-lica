@@ -23,7 +23,7 @@ class Action extends CI_Controller {
     }
 
     public function add_record($table, $idzi) {
-          if(!$this->session_check($idzi) and $idzi != $this->date_model->last_day_id() ) return;
+          if(!$this->session_check($idzi)  ) return;
           $post = $this->input->post();
           unset($post['Furnizor']);
           $furnizor = $this->input->post('Furnizor');
@@ -76,11 +76,7 @@ class Action extends CI_Controller {
             
      }
 
-     public function session_check($idzi) {
-      return isset($_SESSION['userdata']) || $this->date_model->last_day_id() == $idzi;
-    }
-
-    public function loggedin() {
-      echo isset($_SESSION['userdata']);
+     private function session_check($idzi) {
+          return isset($_SESSION['userdata']) || $this->date_model->last_day_id() == $idzi;
     }
 }
