@@ -21,7 +21,7 @@
 		<div class="panel panel-primary">
 			<div class="panel-heading text-center"><h4>Log In</h4></div>
 			<div class="panel-body">
-				<form class="form-horizontal" action ="login/login_check" method="POST" role="form">
+				<form class="form-horizontal" action ="<?php echo base_url('login/login_check')?>" method="POST" role="form">
 					<div class="form-group">
 						<label class="control-label col-sm-3" for="username">Username:</label>
 						<div class="col-sm-9">
