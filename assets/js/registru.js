@@ -50,6 +50,9 @@ function redirect(url){
 function reloadDocument(){
     location.reload(true);
 }
+function showPrintDialog(){
+    window.print();
+}
 
 /***
  * functions that retrieve / send data from / to the server
@@ -57,6 +60,9 @@ function reloadDocument(){
 //returns output from URL request - synchronous function
 function remote(URL){
     return $.ajax({ type: "GET", url: URL, async: false}).responseText;
+}
+function requestRecordDelete(recordID){
+    remote('../index.php/action/delete-record/Sume'+currentTableType+'/'+recordID+'/'+serverData.zi.ID)
 }
 function recordUpdated(data) {
     updateFurnizori();
@@ -72,6 +78,7 @@ function recordUpdated(data) {
     //var recTableBody= editRow.parent();
     var displayRow= templateRow().clone().removeClass('template_row').insertAfter(editRow);
     displayRow[0].dbid= record.ID; //set record id to custom DOM TR property dbid
+    displayRow.find('button').last().click(toggleEdit);
     setRowValues(displayRow, serverData.furnizori[currentTableType][record.IDFurnizor],
         record.Factura, record.Chitanta, decimal(record.Suma));
     editRow.remove();
@@ -80,10 +87,17 @@ function recordUpdated(data) {
 function requestRecordUpdate() {
     if(!editAllowed()) return logOut();
     var tr= $(this).parent().parent();
-    var record= recordFromInputRow(tr);
-    tr.addClass('hidden');
     currentTableType= tr.parent().parent()[0].id.substr(6);
-    $.post( '../index.php/action/edit_record/Sume' + currentTableType + '/' + tr[0].dbid + '/' + serverData.zi.ID,
+    var record= recordFromInputRow(tr);
+    var recordID= tr[0].dbid;
+    //when user clears field "Suma", she is trying to clear the record instead of update it, so we do that instead
+    if(record.Suma=='') {
+        tr.remove();
+        requestRecordDelete(recordID);
+        return;
+    }
+    tr.addClass('hidden');
+    $.post( '../index.php/action/edit_record/Sume' + currentTableType + '/' + recordID + '/' + serverData.zi.ID,
         record, recordUpdated );
 }
 function recordsReturned(jso){
@@ -91,7 +105,9 @@ function recordsReturned(jso){
     console.log(serverData);
     populatePage();
     editMode(editAllowed());
-    showHide(printButton, !isCurrentDate())
+    var endDayInsteadOfPrint= isCurrentDate();
+    showHide(end_day, endDayInsteadOfPrint);
+    showHide(printButton, !endDayInsteadOfPrint);
 }
 function datePicked(dateChange){
 
@@ -109,7 +125,7 @@ function recordAdded(data) {
 
     //get updated "furnizori" data from server
     updateFurnizori();
-
+0.0
     //set the target method's "this" to "currentTableType" (record-table ID without prefix)
     displayRecord.call( currentTableType, JSON.parse(data) );
     clearInputRowValues(tables[currentTableType]);
@@ -120,13 +136,13 @@ function requestNewRecord() {
     if(!editAllowed()) return logOut();
     //console.log('posting marfa');
     var tr = $(this).parent().parent();
-    window.currentTableType = tr.parent().parent()[0].id.substr(6);
+    currentTableType = tr.parent().parent()[0].id.substr(6);
     //alert(jso2string(serverData.furnizori['MarfaTVA9']));
     var data= { 'Furnizor': inputRowVal(tr, 0), 'Factura': inputRowVal(tr, 1),
         'Chitanta': inputRowVal(tr, 2), 'Suma': inputRowVal(tr, 3), 'IDZi': serverData.zi.ID };
     //alert(tip+'\n'+jso2string(data));
     clearInputRowValues(tables[currentTableType]);
-    $.post('../index.php/action/add_record/Sume'+currentTableType, data, recordAdded);
+    $.post('../index.php/action/add_record/Sume'+currentTableType+'/'+serverData.zi.ID, data, recordAdded);
 }
 //ajax callback: new date added
 function endDayDone(data){
@@ -137,10 +153,12 @@ function endDayDone(data){
 
     //update the datepicker to allow selecting the new day
     datePicker.data('DateTimePicker').maxDate(newLastDay);
+
+    showHide(printButton, true);
 }
 function endDay(){
     if(!editAllowed()) return logOut();
-    end_day.remove();
+    showHide(end_day, false);
     $.post('../index.php/table/new_day', null, endDayDone);
 }
 function getTotals(){
@@ -350,7 +368,6 @@ function constructDatalistsFurnizori(){
 }
 function editMode(enable){
     showHide($('.input_row,.input_cell,.action'), enable);
-    showHide(end_day, enable);
 }
 
 /***
@@ -391,7 +408,7 @@ function editSoldInitial(){
 
 //set global variables; the order of some of the function calls matters;
 function pageLoaded($) {
-
+    window.currentTableType= '';
     window.sold_initial= $('#sold_initial');
     sold_initial.click(editSoldInitial);
 
@@ -418,7 +435,7 @@ function pageLoaded($) {
     });
 
     $('#request_new_sold_initial').click(requestNewSoldInitial);
-    window.printButton= $('#print_button').click(window.print);
+    window.printButton= $('#print_button').click(showPrintDialog);
 
     constructDatalistsFurnizori();
 
