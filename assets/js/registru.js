@@ -57,12 +57,14 @@ function showPrintDialog(){
 /***
  * functions that retrieve / send data from / to the server
  */
+
 //returns output from URL request - synchronous function
 function remote(URL){
     return $.ajax({ type: "GET", url: URL, async: false}).responseText;
 }
 function requestRecordDelete(recordID){
-    remote('../index.php/action/delete-record/Sume'+currentTableType+'/'+recordID+'/'+serverData.zi.ID)
+    remote('../index.php/action/delete-record/Sume'+currentTableType+'/'+recordID+'/'+serverData.zi.ID);
+    updateTotals();
 }
 function recordUpdated(data) {
     updateFurnizori();
@@ -125,7 +127,6 @@ function recordAdded(data) {
 
     //get updated "furnizori" data from server
     updateFurnizori();
-0.0
     //set the target method's "this" to "currentTableType" (record-table ID without prefix)
     displayRecord.call( currentTableType, JSON.parse(data) );
     clearInputRowValues(tables[currentTableType]);
@@ -139,8 +140,10 @@ function requestNewRecord() {
     currentTableType = tr.parent().parent()[0].id.substr(6);
     //alert(jso2string(serverData.furnizori['MarfaTVA9']));
     var data= { 'Furnizor': inputRowVal(tr, 0), 'Factura': inputRowVal(tr, 1),
-        'Chitanta': inputRowVal(tr, 2), 'Suma': inputRowVal(tr, 3), 'IDZi': serverData.zi.ID };
-    //alert(tip+'\n'+jso2string(data));
+        'Chitanta': inputRowVal(tr, 2), 'Suma': inputRowVal(tr, 3).trim(), 'IDZi': serverData.zi.ID };
+    if(data.Furnizor.trim()=='') return;
+    if(data.Suma.trim()=='') return;
+    //alert(tip+'\n'+jso2string(data)); //debugging
     clearInputRowValues(tables[currentTableType]);
     $.post('../index.php/action/add_record/Sume'+currentTableType+'/'+serverData.zi.ID, data, recordAdded);
 }
@@ -176,6 +179,7 @@ function aportAdded(data){
     serverData.Aport.push(newAport);
     console.log(serverData);
     displayAport(newAport);
+    updateTotals();
 }
 function addAport(){
     if(!editAllowed()) return logOut();
@@ -194,7 +198,10 @@ function requestNewSoldInitial(){
     populatePage();
     $('#sold_initial_popup').modal('hide');
 }
-
+function logout(){
+    remote('../index.php/logout');
+    redirect('../index.php/table');
+}
 /***
  * DOM retrieval
  */
@@ -237,6 +244,7 @@ function toggleEdit() {
     var row= $(this).parent().parent();
     //don't edit two rows at a time for now
     //if(row.parent().children('tr.input_row').length>1) return;
+    //TODO: should cancel editing current row when trying to edit another row
     var newrow= inputRow(row.parent()).clone().insertAfter(row);
     newrow[0].dbid= row[0].dbid;
     newrow.find('button').last().click(requestRecordUpdate);
@@ -293,7 +301,7 @@ function displayCumuli(){
 function displayTotals(){
     var totalPlati= 0;
     forEachMember(tables, function(table, tip){
-        setRowValue(table.children('tr.totals_row'), 1, serverData.totals[tip]);
+        setRowValue(table.children('tr.totals_row'), 1, decimal(serverData.totals[tip]));
         totalPlati+= serverData.totals[tip];
     });
     $('#total_Aport').text(decimal(serverData.totals.Aport));
@@ -319,6 +327,7 @@ function populatePage(){
     displayCumuli();
     datatitlu.text(serverData.zi.Data);
     displayTotals();
+    showHide(logoutButton, serverData.loggedin)
 }
 function setupDates(){
 
@@ -426,6 +435,8 @@ function pageLoaded($) {
 
     //console.log(datalists); //debugging
 
+    window.logoutButton= $('#logout');
+    logoutButton.click(logout);
     populatePage();
 
     //bindings
