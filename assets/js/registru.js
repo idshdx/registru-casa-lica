@@ -24,7 +24,7 @@ function showHide(jQ, display){
     if(display) jQ.removeClass('hidden'); else jQ.addClass('hidden');
 }
 function cookieExists(name){
-    alert(jso2string(document.cookie));
+    //alert(jso2string(document.cookie)); //debugging
     return document.cookie.indexOf(name)>=0;
 }
 function redirect(url){
@@ -81,7 +81,7 @@ function datePicked(dateChange){
     //display the selected date in the title
     datatitlu.text(datePicker.data('DateTimePicker').viewDate().format('l'));
 
-    $.post('../index.php/table/get-records-json/' + selectedDateISO(), null, recordsReturned);
+    $.post('../index.php/table/get-records-json/'+selectedDateISO(), null, recordsReturned);
 }
 function updateFurnizori(){
     serverData.furnizori= JSON.parse(remote('../index.php/table/get-furnizori-json'));
@@ -351,8 +351,11 @@ function getTables(){
 function loggedIn(){
     return remote('../index.php/action/loggedin').trim() != '';
 }
+function lastDate(){
+    return datePicker.data('DateTimePicker').maxDate().format('YYYY-MM-DD');
+}
 function isCurrentDate(){
-    return selectedDateISO()==serverData.zi.Data;
+    return selectedDateISO()==lastDate();
 }
 function editAllowed(){
     return isCurrentDate() || loggedIn();
@@ -398,8 +401,7 @@ function pageLoaded($) {
     });
 
     $('#request_new_sold_initial').click(requestNewSoldInitial);
-    window.printButton= $('#sold_initial_popup').find('button.print');
-    printButton.click(window.print);
+    window.printButton= $('#print_button').click(window.print);
 
     constructDatalistsFurnizori();
 

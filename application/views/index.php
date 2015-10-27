@@ -219,7 +219,7 @@
 			<button id="end_day" class="btn btn-primary save">
                 <span class="glyphicon glyphicon-ok"></span> Salvează Registru
             </button>
-            <button class="btn btn-primary print">
+            <button id="print_button" class="btn btn-primary print hidden">
                 <span class="glyphicon glyphicon-print"></span> Imprimă
             </button>
 		</div>
@@ -246,7 +246,7 @@
                 </div>
                 <div class="modal-footer">
                     <form class="form-inline">
-                        <button type="button" class="btn btn-default" style="width:10em" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" style="width:10em" data-dismiss="modal">Înapoi</button>
                         <button type="button" class="btn btn-primary" style="width:10em" id="request_new_sold_initial">Actualizează!</button>
                     </form>
                 </div>
