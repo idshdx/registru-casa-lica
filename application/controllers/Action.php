@@ -22,8 +22,8 @@ class Action extends CI_Controller {
       
     }
 
-    public function add_record($table) {
-          if(!$this->session_check($idzi)) return;
+    public function add_record($table, $idzi) {
+          if(!$this->session_check($idzi) and $idzi != $this->date_model->last_day_id() ) return;
           $post = $this->input->post();
           unset($post['Furnizor']);
           $furnizor = $this->input->post('Furnizor');
