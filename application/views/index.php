@@ -42,6 +42,9 @@
 			            </div>
 			        </div>
 				</div>
+                <div class="navbar-form navbar-right">
+                    <button type="submit" class="btn btn-primary" id="logout">Logout</button>
+                </div>
 			</div>
 		</div>
 	</nav>
@@ -132,10 +135,10 @@
                     </td>
 				</tr>
 				<tr class="input_row screen">
-					<td><input class="form-control usr-input" type="text"></td>
-					<td><input class="form-control usr-input" type="text"></td>
-					<td><input class="form-control usr-input" type="text"></td>
 					<td><input class="form-control usr-input" type="text" list="furnizori_MarfaTVA24"></td>
+					<td><input class="form-control usr-input" type="text"></td>
+					<td><input class="form-control usr-input" type="text"></td>
+					<td><input class="form-control usr-input" type="text"></td>
 					<td>
                         <button class="btn btn-success btn-sm">
                             <span class="glyphicon glyphicon-plus"></span> Salvează
@@ -172,10 +175,10 @@
                     </td>
 				</tr>
 				<tr class="input_row screen">
-					<td><input class="form-control usr-input" type="text"></td>
-					<td><input class="form-control usr-input" type="text"></td>
-					<td><input class="form-control usr-input" type="text"></td>
 					<td><input class="form-control usr-input" type="text" list="furnizori_Cheltuieli"></td>
+					<td><input class="form-control usr-input" type="text"></td>
+					<td><input class="form-control usr-input" type="text"></td>
+					<td><input class="form-control usr-input" type="text"></td>
 					<td><button class="btn btn-success btn-sm">
                             <span class="glyphicon glyphicon-plus"></span> Salvează
                         </button>
@@ -220,7 +223,7 @@
                 <span class="glyphicon glyphicon-ok"></span> Salvează Registru
             </button>
             <button id="print_button" class="btn btn-primary print hidden">
-                <span class="glyphicon glyphicon-print"></span> Imprimă
+                <span class="glyphicon glyphicon-print"></span> Printează
             </button>
 		</div>
 		<br>
