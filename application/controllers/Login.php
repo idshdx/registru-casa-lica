@@ -44,8 +44,4 @@ class Login extends CI_Controller {
         $this->session->mark_as_temp('userdata', 7200); //7200s,2hours
   	}
 
-    public function logout() {
-      $this->session->unset_userdata('userdata');
-    }
-
 }
