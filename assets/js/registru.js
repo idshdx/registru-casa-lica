@@ -62,8 +62,13 @@ function showPrintDialog(){
 function remote(URL){
     return $.ajax({ type: "GET", url: URL, async: false}).responseText;
 }
+function validateRecordData(recordData){
+    recordData.Suma= recordData.Suma.trim();
+    recordData.Furnizor= recordData.Furnizor.trim();
+    return (recordData.Suma!='' && recordData.Furnizor!='')
+}
 function requestRecordDelete(recordID){
-    remote('../index.php/action/delete-record/Sume'+currentTableType+'/'+recordID+'/'+serverData.zi.ID);
+    remote(URLRoot+'action/delete-record/Sume'+currentTableType+'/'+recordID+'/'+serverData.zi.ID);
     updateTotals();
 }
 function recordUpdated(data) {
@@ -92,14 +97,15 @@ function requestRecordUpdate() {
     currentTableType= tr.parent().parent()[0].id.substr(6);
     var record= recordFromInputRow(tr);
     var recordID= tr[0].dbid;
-    //when user clears field "Suma", she is trying to clear the record instead of update it, so we do that instead
+    //when user clears field "Valoare" (Suma),
+    //she is trying to clear the record instead of update it, so we do that instead
     if(record.Suma=='') {
         tr.remove();
         requestRecordDelete(recordID);
         return;
     }
     tr.addClass('hidden');
-    $.post( '../index.php/action/edit_record/Sume' + currentTableType + '/' + recordID + '/' + serverData.zi.ID,
+    $.post( URLRoot+'action/edit_record/Sume' + currentTableType + '/' + recordID + '/' + serverData.zi.ID,
         record, recordUpdated );
 }
 function recordsReturned(jso){
@@ -116,10 +122,10 @@ function datePicked(dateChange){
     //display the selected date in the title
     datatitlu.text(datePicker.data('DateTimePicker').viewDate().format('l'));
 
-    $.post('../index.php/table/get-records-json/'+selectedDateISO(), null, recordsReturned);
+    $.post(URLRoot+'table/get-records-json/'+selectedDateISO(), null, recordsReturned);
 }
 function updateFurnizori(){
-    serverData.furnizori= JSON.parse(remote('../index.php/table/get-furnizori-json'));
+    serverData.furnizori= JSON.parse(remote(URLRoot+'table/get-furnizori-json'));
     updateFurnizoriDatalists();
 }
 //ajax callback for requestNewRecord
@@ -140,12 +146,11 @@ function requestNewRecord() {
     currentTableType = tr.parent().parent()[0].id.substr(6);
     //alert(jso2string(serverData.furnizori['MarfaTVA9']));
     var data= { 'Furnizor': inputRowVal(tr, 0), 'Factura': inputRowVal(tr, 1),
-        'Chitanta': inputRowVal(tr, 2), 'Suma': inputRowVal(tr, 3).trim(), 'IDZi': serverData.zi.ID };
-    if(data.Furnizor.trim()=='') return;
-    if(data.Suma.trim()=='') return;
+        'Chitanta': inputRowVal(tr, 2), 'Suma': inputRowVal(tr, 3), 'IDZi': serverData.zi.ID };
+    if(!validateRecordData(data)) return;
     //alert(tip+'\n'+jso2string(data)); //debugging
     clearInputRowValues(tables[currentTableType]);
-    $.post('../index.php/action/add_record/Sume'+currentTableType+'/'+serverData.zi.ID, data, recordAdded);
+    $.post(URLRoot+'action/add_record/Sume'+currentTableType+'/'+serverData.zi.ID, data, recordAdded);
 }
 //ajax callback: new date added
 function endDayDone(data){
@@ -162,10 +167,10 @@ function endDayDone(data){
 function endDay(){
     if(!editAllowed()) return logOut();
     showHide(end_day, false);
-    $.post('../index.php/table/new_day', null, endDayDone);
+    $.post(URLRoot+'table/new_day', null, endDayDone);
 }
 function getTotals(){
-    serverData.totals= JSON.parse(remote('../index.php/table/get-total-json/'+serverData.zi.ID));
+    serverData.totals= JSON.parse(remote(URLRoot+'table/get-total-json/'+serverData.zi.ID));
 }
 function displayAport(jsoAport){
     aportTemplate.clone().insertBefore(inputAport.parent())
@@ -185,22 +190,22 @@ function addAport(){
     if(!editAllowed()) return logOut();
     newAport= inputAport.val();
     inputAport.val('');
-    $.post('../index.php/action/add_aport/'+serverData.zi.ID +'/' + newAport, null, aportAdded);
+    $.post(URLRoot+'action/add_aport/'+serverData.zi.ID +'/' + newAport, null, aportAdded);
 }
 function updateTotals(){
     getTotals();
     displayTotals();
 }
 function requestNewSoldInitial(){
-    var output= remote('../index.php/action/edit-sold-initial/'+serverData.zi.ID+'/'+$('#edit_sold_initial').val());
+    var output= remote(URLRoot+'action/edit-sold-initial/'+serverData.zi.ID+'/'+$('#edit_sold_initial').val());
     if(output.trim()!='') alert(output); //debugging
-    serverData= JSON.parse( remote('../index.php/table/get-records-json/'+selectedDateISO()) );
+    serverData= JSON.parse( remote(URLRoot+'table/get-records-json/'+selectedDateISO()) );
     populatePage();
     $('#sold_initial_popup').modal('hide');
 }
 function logout(){
-    remote('../index.php/logout');
-    redirect('../index.php/table');
+    remote(URLRoot+'logout');
+    redirect(URLRoot+'table');
 }
 /***
  * DOM retrieval
@@ -392,7 +397,7 @@ function getTables(){
     });
 }
 function loggedIn(){
-    return remote('../index.php/action/loggedin').trim() != '';
+    return remote(URLRoot+'action/loggedin').trim() != '';
 }
 function lastDate(){
     return datePicker.data('DateTimePicker').maxDate().format('YYYY-MM-DD');
@@ -404,7 +409,7 @@ function editAllowed(){
     return isCurrentDate() || loggedIn();
 }
 function logOut(){
-    redirect('../index.php/login');
+    redirect(URLRoot+'login');
 }
 function dayOfMonth(){
     return datePicker.data('DateTimePicker').viewDate().date();

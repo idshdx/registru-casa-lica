@@ -51,7 +51,6 @@
     width: 90%;
 }
 .action {
-    /*width: 3.5em;*/
     cursor: pointer;
 }
 .btn {
@@ -66,6 +65,7 @@
 }
 .navbar {
     border-radius: 0;
+	box-shadow: 0 8px 17px rgba(0, 0, 0, .2);
 }
 .usr-input, .button, .screen {
     height: 2em;
@@ -77,6 +77,7 @@
 }
 .save, .print {
     width: 25%;
+	box-shadow: 0 8px 17px rgba(0, 0, 0, .2);
 }
 .panel {
     border-radius: 1px;
@@ -113,11 +114,9 @@ thead>tr:first-child, tbody>tr:last-child{
 .template_row, .template_cell{
     display: none;
 }
-
 input {
     text-align: center;
 }
-
 .big-row{
     height: 80px;
 }
@@ -130,4 +129,10 @@ input {
 }
 .modal-content, .modal-content input {
 	border-radius: 1px;
+}
+.modal {
+	margin-top: 12%;
+}
+#logout {
+	min-width: 85px;
 }

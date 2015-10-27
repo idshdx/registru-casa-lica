@@ -31,6 +31,7 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#">Registru de Casă</a></li>
 					<li><a href="receptii.html">Recepţii</a></li>
+                    <li><a href="aviz.html">Aviz de Predare</a></li>
 				</ul>
 				<div class="navbar-form navbar-left">
 				    <div class="form-group widget">
