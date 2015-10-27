@@ -25,7 +25,6 @@ class Table extends CI_Controller {
      public function index() {
           $idzi = $this->date_model->last_day_id() ;        
           $records = $this->get_records($idzi);
-          $records['loggedin'] = $this->session_check($idzi);
           $this->load->view('index', ['server_data' => json_encode($records) ]);
      }
 
@@ -71,7 +70,8 @@ class Table extends CI_Controller {
                     'first_date' => $first_date,
                     'furnizori' => $furnizori, 
                     'cumuli' => $calcule,
-                    'totals' => $this->get_total($idzi) ] ;
+                    'totals' => $this->get_total($idzi),
+                    'loggedin' => $this->session_check($idzi) ] ;
      }
 
      public function get_furnizori_json() {
