@@ -61,6 +61,9 @@ function showPrintDialog(){
 function remote(URL){
     return $.ajax({ type: "GET", url: URL, async: false}).responseText;
 }
+function requestRecordDelete(recordID){
+    remote('../index.php/action/delete-record/Sume'+currentTableType+'/'+recordID+'/'+serverData.zi.ID)
+}
 function recordUpdated(data) {
     updateFurnizori();
     //getRecords()?
@@ -83,10 +86,17 @@ function recordUpdated(data) {
 function requestRecordUpdate() {
     if(!editAllowed()) return logOut();
     var tr= $(this).parent().parent();
-    var record= recordFromInputRow(tr);
-    tr.addClass('hidden');
     currentTableType= tr.parent().parent()[0].id.substr(6);
-    $.post( '../index.php/action/edit_record/Sume' + currentTableType + '/' + tr[0].dbid + '/' + serverData.zi.ID,
+    var record= recordFromInputRow(tr);
+    var recordID= tr[0].dbid;
+    //when user clears field "Suma", she is trying to clear the record instead of update it, so we do that instead
+    if(record.Suma=='') {
+        tr.remove();
+        requestRecordDelete(recordID);
+        return;
+    }
+    tr.addClass('hidden');
+    $.post( '../index.php/action/edit_record/Sume' + currentTableType + '/' + recordID + '/' + serverData.zi.ID,
         record, recordUpdated );
 }
 function recordsReturned(jso){
@@ -114,7 +124,7 @@ function recordAdded(data) {
 
     //get updated "furnizori" data from server
     updateFurnizori();
-
+0.0
     //set the target method's "this" to "currentTableType" (record-table ID without prefix)
     displayRecord.call( currentTableType, JSON.parse(data) );
     clearInputRowValues(tables[currentTableType]);
@@ -125,7 +135,7 @@ function requestNewRecord() {
     if(!editAllowed()) return logOut();
     //console.log('posting marfa');
     var tr = $(this).parent().parent();
-    window.currentTableType = tr.parent().parent()[0].id.substr(6);
+    currentTableType = tr.parent().parent()[0].id.substr(6);
     //alert(jso2string(serverData.furnizori['MarfaTVA9']));
     var data= { 'Furnizor': inputRowVal(tr, 0), 'Factura': inputRowVal(tr, 1),
         'Chitanta': inputRowVal(tr, 2), 'Suma': inputRowVal(tr, 3), 'IDZi': serverData.zi.ID };
@@ -397,7 +407,7 @@ function editSoldInitial(){
 
 //set global variables; the order of some of the function calls matters;
 function pageLoaded($) {
-
+    window.currentTableType= '';
     window.sold_initial= $('#sold_initial');
     sold_initial.click(editSoldInitial);
 
