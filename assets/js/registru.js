@@ -78,6 +78,7 @@ function recordUpdated(data) {
     //var recTableBody= editRow.parent();
     var displayRow= templateRow().clone().removeClass('template_row').insertAfter(editRow);
     displayRow[0].dbid= record.ID; //set record id to custom DOM TR property dbid
+    displayRow.find('button').last().click(toggleEdit);
     setRowValues(displayRow, serverData.furnizori[currentTableType][record.IDFurnizor],
         record.Factura, record.Chitanta, decimal(record.Suma));
     editRow.remove();
