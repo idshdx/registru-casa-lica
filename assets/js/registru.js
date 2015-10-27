@@ -1,4 +1,21 @@
 /***
+ *
+ * Main app, UI, and communication logic
+ *
+ * Functions towards the end of this source file will be called earlier,
+ * while functions appearing earlier will be used by other functions below them.
+ *
+ * Functionality: data in the main tables (plăţi) is called "records" (displayed as rows).
+ * We keep track of each row(TR)'s associated record primary key (ID) as a custom DOM element property ("dbid").
+ * Functions that deal with the UI/DOM all work with jQuery objects, of which most are assigned to global variables.
+ * There's some looping through element collections and AJAX requests and callbacks implementing most user actions.
+ * We initially are passed serverData from PHP and update it on datePicked, etc.
+ * The server deals with calculations such as cumuli and totals, we just retrieve it when it needs to be updated.
+ *
+ * */
+
+
+/***
  * utility functions
  */
 function jso2string(jso) {
@@ -17,14 +34,14 @@ function forEachMember( Obj, func){
         func(Obj[key], key, Obj);
     });
 }
-function subtractDPDecimals(dpDec1, dpDec2){
+function subtractDecimals(dpDec1, dpDec2){
     return (dpDec1*100 - dpDec2*100)/100;
 }
 function showHide(jQ, display){
     if(display) jQ.removeClass('hidden'); else jQ.addClass('hidden');
 }
 function cookieExists(name){
-    alert(jso2string(document.cookie));
+    //alert(jso2string(document.cookie)); //debugging
     return document.cookie.indexOf(name)>=0;
 }
 function redirect(url){
@@ -43,6 +60,7 @@ function remote(URL){
 }
 function recordUpdated(data) {
     updateFurnizori();
+    //getRecords()?
     //printJSO(serverData);
     //alert(data); //debugging
     var record= JSON.parse(data);
@@ -73,13 +91,14 @@ function recordsReturned(jso){
     console.log(serverData);
     populatePage();
     editMode(editAllowed());
+    showHide(printButton, !isCurrentDate())
 }
 function datePicked(dateChange){
 
     //display the selected date in the title
     datatitlu.text(datePicker.data('DateTimePicker').viewDate().format('l'));
 
-    $.post('../index.php/table/get-records-json/' + selectedDateISO(), null, recordsReturned);
+    $.post('../index.php/table/get-records-json/'+selectedDateISO(), null, recordsReturned);
 }
 function updateFurnizori(){
     serverData.furnizori= JSON.parse(remote('../index.php/table/get-furnizori-json'));
@@ -150,6 +169,13 @@ function updateTotals(){
     getTotals();
     displayTotals();
 }
+function requestNewSoldInitial(){
+    var output= remote('../index.php/action/edit-sold-initial/'+serverData.zi.ID+'/'+$('#edit_sold_initial').val());
+    if(output.trim()!='') alert(output); //debugging
+    serverData= JSON.parse( remote('../index.php/table/get-records-json/'+selectedDateISO()) );
+    populatePage();
+    $('#sold_initial_popup').modal('hide');
+}
 
 /***
  * DOM retrieval
@@ -162,7 +188,7 @@ function inputRow(tb) {
 }
 function recordFromInputRow(row) {
     var inputs= row.children('td').children('input');
-    var record={  }; // { ID: row[0].dbid }
+    var record= {  }; // { ID: row[0].dbid }
     record['Furnizor']= inputs.eq(0).val();
     var value= inputs.eq(1).val();
     if(value!='') record['Factura']= value;
@@ -180,6 +206,9 @@ function aportCells(){
 }
 function selectedDateISO(){
     return datePicker.data('DateTimePicker').viewDate().format('YYYY-MM-DD');
+}
+function showPrint(){
+    //TODO
 }
 
 /***
@@ -253,16 +282,14 @@ function displayTotals(){
     $('#total_plati').text(decimal(totalPlati));
     $('#total_sold_curent').text(decimal(serverData.cumuli.soldinitial + serverData.totals.Aport));
     //in JS it is necessary to get rid of decimals in order for the subtraction to work as expected
-    var soldFinal= subtractDPDecimals(serverData.cumuli.soldinitial + serverData.totals.Aport, totalPlati);
+    var soldFinal= subtractDecimals(serverData.cumuli.soldinitial + serverData.totals.Aport, totalPlati);
     $('#total_sold_final').text(decimal(soldFinal));
 }
 function displayAporturi(){
     //clear current aportCells
     aportCells().remove();
     //display all aporturi in serverData.Aport
-    serverData.Aport.forEach(function(jsoAport){
-        displayAport(jsoAport);
-    });
+    serverData.Aport.forEach(displayAport);
 }
 //populate page tables, etc. with data
 function populatePage(){
@@ -338,18 +365,35 @@ function getTables(){
         tables[tipPlata]= $('#tabel_'+tipPlata).children('tbody');
     });
 }
-function session(){
-    return remote('../index.php/table/session-check-echo/'+serverData.zi.ID).trim() != '';
+function loggedIn(){
+    return remote('../index.php/action/loggedin').trim() != '';
+}
+function lastDate(){
+    return datePicker.data('DateTimePicker').maxDate().format('YYYY-MM-DD');
+}
+function isCurrentDate(){
+    return selectedDateISO()==lastDate();
 }
 function editAllowed(){
-    return selectedDateISO()==serverData.zi.ID || session();
+    return isCurrentDate() || loggedIn();
 }
 function logOut(){
     redirect('../index.php/login');
 }
+function dayOfMonth(){
+    return datePicker.data('DateTimePicker').viewDate().date();
+}
+function editSoldInitial(){
+    if(!( dayOfMonth()==1 && loggedIn() )) return;
+    $('#edit_sold_initial').val(sold_initial.text());
+    $('#sold_initial_popup').modal();
+}
 
 //set global variables; the order of some of the function calls matters;
 function pageLoaded($) {
+
+    window.sold_initial= $('#sold_initial');
+    sold_initial.click(editSoldInitial);
 
     window.datatitlu= $('#datatitlu');
     setupDates();
@@ -372,6 +416,9 @@ function pageLoaded($) {
     forEachMember( tables, function(table){
         table.find('button').last().click(requestNewRecord);
     });
+
+    $('#request_new_sold_initial').click(requestNewSoldInitial);
+    window.printButton= $('#print_button').click(window.print);
 
     constructDatalistsFurnizori();
 

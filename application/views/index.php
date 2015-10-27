@@ -60,7 +60,7 @@
 			</thead>
 			<tbody>
 				<tr id="cumuli">
-					<td>99999.99</td>
+					<td id="sold_initial">99999.99</td>
 					<td>99999.99</td>
 					<td>99999.99</td>
 					<td>99999.99</td>
@@ -219,9 +219,42 @@
 			<button id="end_day" class="btn btn-primary save">
                 <span class="glyphicon glyphicon-ok"></span> Salvează Registru
             </button>
+            <button id="print_button" class="btn btn-primary print hidden">
+                <span class="glyphicon glyphicon-print"></span> Imprimă
+            </button>
 		</div>
 		<br>
 	</div>
-	<footer><p>Copyright © 2015 SC LICA SRL. Toate drepturile rezervate.</p></footer>
+
+
+    <div class="modal fade" id="sold_initial_popup" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Modifică soldul iniţial pe luna curentă</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline">
+                        <div class="form-group" style="margin-left: auto; margin-right: auto">
+                            <label for="recipient-name" class="control-label">Sold iniţial luna curentă:</label>
+                            <input type="text" name="edit_sold_initial" class="form-control" id="edit_sold_initial">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <form class="form-inline">
+                        <button type="button" class="btn btn-default" style="width:10em" data-dismiss="modal">Înapoi</button>
+                        <button type="button" class="btn btn-primary" style="width:10em" id="request_new_sold_initial">Actualizează!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+	<footer class="page-space"><p>Copyright © 2015 SC LICA SRL. Toate drepturile rezervate.</p></footer>
 </body>
 </html>

@@ -70,6 +70,7 @@
 .usr-input, .button, .screen {
     height: 2em;
     border-radius: 1px;
+	padding: 0;
 }
 .login-input {
     border-radius: 1px;
@@ -123,4 +124,10 @@ input {
 .btn-sm {
      padding-left: 5px;
      padding-right: 5px;
+}
+.modal-footer, .modal-body, .modal-title {
+	text-align: center;
+}
+.modal-content, .modal-content input {
+	border-radius: 1px;
 }
