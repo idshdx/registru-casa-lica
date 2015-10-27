@@ -1,4 +1,21 @@
 /***
+ *
+ * Main app, UI, and communication logic
+ *
+ * Functions towards the end of this source file will be called earlier,
+ * while functions appearing earlier will be used by other functions below them.
+ *
+ * Functionality: data in the main tables (plăţi) is called "records" (displayed as rows).
+ * We keep track of each row(TR)'s associated record primary key (ID) as a custom DOM element property ("dbid").
+ * Functions that deal with the UI/DOM all work with jQuery objects, of which most are assigned to global variables.
+ * There's some looping through element collections and AJAX requests and callbacks implementing most user actions.
+ * We initially are passed serverData from PHP and update it on datePicked, etc.
+ * The server deals with calculations such as cumuli and totals, we just retrieve it when it needs to be updated.
+ *
+ * */
+
+
+/***
  * utility functions
  */
 function jso2string(jso) {
