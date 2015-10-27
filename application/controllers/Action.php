@@ -79,4 +79,8 @@ class Action extends CI_Controller {
      private function session_check($idzi) {
           return isset($_SESSION['userdata']) || $this->date_model->last_day_id() == $idzi;
     }
+
+    public function loggedin() {
+      return isset($_SESSION['userdata']);
+    }
 }
