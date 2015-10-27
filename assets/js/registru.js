@@ -50,6 +50,9 @@ function redirect(url){
 function reloadDocument(){
     location.reload(true);
 }
+function showPrintDialog(){
+    window.print();
+}
 
 /***
  * functions that retrieve / send data from / to the server
@@ -91,7 +94,9 @@ function recordsReturned(jso){
     console.log(serverData);
     populatePage();
     editMode(editAllowed());
-    showHide(printButton, !isCurrentDate())
+    var endDayInsteadOfPrint= isCurrentDate();
+    showHide(end_day, endDayInsteadOfPrint);
+    showHide(printButton, !endDayInsteadOfPrint);
 }
 function datePicked(dateChange){
 
@@ -126,7 +131,7 @@ function requestNewRecord() {
         'Chitanta': inputRowVal(tr, 2), 'Suma': inputRowVal(tr, 3), 'IDZi': serverData.zi.ID };
     //alert(tip+'\n'+jso2string(data));
     clearInputRowValues(tables[currentTableType]);
-    $.post('../index.php/action/add_record/Sume'+currentTableType, data, recordAdded);
+    $.post('../index.php/action/add_record/Sume'+currentTableType+'/'+serverData.zi.ID, data, recordAdded);
 }
 //ajax callback: new date added
 function endDayDone(data){
@@ -137,10 +142,12 @@ function endDayDone(data){
 
     //update the datepicker to allow selecting the new day
     datePicker.data('DateTimePicker').maxDate(newLastDay);
+
+    showHide(printButton, true);
 }
 function endDay(){
     if(!editAllowed()) return logOut();
-    end_day.remove();
+    showHide(end_day, false);
     $.post('../index.php/table/new_day', null, endDayDone);
 }
 function getTotals(){
@@ -350,7 +357,6 @@ function constructDatalistsFurnizori(){
 }
 function editMode(enable){
     showHide($('.input_row,.input_cell,.action'), enable);
-    showHide(end_day, enable);
 }
 
 /***
@@ -418,7 +424,7 @@ function pageLoaded($) {
     });
 
     $('#request_new_sold_initial').click(requestNewSoldInitial);
-    window.printButton= $('#print_button').click(window.print);
+    window.printButton= $('#print_button').click(showPrintDialog);
 
     constructDatalistsFurnizori();
 
