@@ -20,8 +20,4 @@ class Logout extends CI_Controller {
     public function index() {
       $this->session->unset_userdata('userdata');  
     }
-
-    public function session_check() {
-      return isset($_SESSION['userdata']);
-    }
 }
