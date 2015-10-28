@@ -6,12 +6,8 @@ class Login extends CI_Controller {
   	public function __construct() {
         parent::__construct();
         $this->load->helper('form');
-        $this->load->library('session');
-        $this->load->helper('url');
-        $this->load->helper('html');
-        $this->load->database();
         $this->load->library('form_validation');
-        //load the model classes and helpers
+        $this->load->helper('url');
         $this->load->model(['user_model', 'main_model', 'soldinitial_model', 'furnizori_model', 'date_model', 'calcul_model']);
         $this->load->helper('registru_helper'); 
             
@@ -31,7 +27,7 @@ class Login extends CI_Controller {
 
               if($is_user) {
               	$this->make_session($username, $password);
-              	redirect(site_url('table/'));
+              	redirect(site_url('main/'));
               } else {
                 $this->session->set_flashdata('error', 'Invalid Username or Password!');
               	redirect(site_url('login/'));
