@@ -45,25 +45,33 @@ class Action extends CI_Controller {
           
      }
 
-     public function edit_record($table, $id, $idzi) {
-        if(!$this->session_check($idzi)) return;
+     private function edit($table, $id) {
+        $idzi = $this->main_model->idzi_by_id($table, $id);
+        
+        if(is_null($idzi) || $this->session_check($idzi)) {
 
-        $post = $this->input->post();
-        unset($post['Furnizor']);
+            $post = $this->input->post();
+            unset($post['Furnizor']);
 
-        $furnizor = $this->input->post('Furnizor');
-        $tip_furnizor = substr($table, 4);
-        $idfurnizor = $this->furnizori_model->furnizor_id($furnizor, $tip_furnizor);
+            $furnizor = $this->input->post('Furnizor');
+            $tip_furnizor = substr($table, 4);
+            $idfurnizor = $this->furnizori_model->furnizor_id($furnizor, $tip_furnizor);
 
 
-        if($idfurnizor == 0) $idfurnizor = $this->furnizori_model->new_furnizor($tip_furnizor, $furnizor);  
-        $post['IDFurnizor'] = $idfurnizor;
+            if($idfurnizor == 0) $idfurnizor = $this->furnizori_model->new_furnizor($tip_furnizor, $furnizor);  
+            $post['IDFurnizor'] = $idfurnizor;
 
-        $this->main_model->edit_record($table, $id, $post);
-        echo json_encode($this->main_model->get_record_by_id($table, $id)); 
-                  
-             
-     }
+            $this->main_model->edit_record($table, $id, $post);
+            echo json_encode($this->main_model->get_record_by_id($table, $id)); 
+            return true;
+
+        } 
+        return false;
+    }
+
+    public function edit_record($table, $id) {
+      return $this->edit($table, $id);
+    }
 
      private function delete($table, $id) {
         $idzi = $this->main_model->idzi_by_id($table, $id);
