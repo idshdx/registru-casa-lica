@@ -102,7 +102,7 @@
 					<td><input class="form-control usr-input" type="text"></td>
 					<td>
                         <button class="btn btn-success btn-sm">
-                            <span class="glyphicon glyphicon-plus"></span> Salvează
+                            <span class="glyphicon glyphicon-ok"></span> Salvează
                         </button>
                     </td>
 				</tr>
@@ -142,7 +142,7 @@
 					<td><input class="form-control usr-input" type="text"></td>
 					<td>
                         <button class="btn btn-success btn-sm">
-                            <span class="glyphicon glyphicon-plus"></span> Salvează
+                            <span class="glyphicon glyphicon-ok"></span> Salvează
                         </button>
                     </td>
 				</tr>
@@ -181,7 +181,7 @@
 					<td><input class="form-control usr-input" type="text"></td>
 					<td><input class="form-control usr-input" type="text"></td>
 					<td><button class="btn btn-success btn-sm">
-                            <span class="glyphicon glyphicon-plus"></span> Salvează
+                            <span class="glyphicon glyphicon-ok"></span> Salvează
                         </button>
                     </td>
 				</tr>
@@ -204,7 +204,7 @@
 					<td id="total_Aport">99999.99</td>
 					<td class="screen action">
                         <button id="new_aport" class="btn btn-success btn-sm">
-                            <span class="glyphicon glyphicon-plus"></span> Salvează
+                            <span class="glyphicon glyphicon-ok"></span> Salvează
                         </button>
                     </td>
 				</tr>

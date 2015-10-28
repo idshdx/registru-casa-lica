@@ -122,10 +122,10 @@ function datePicked(dateChange){
     //display the selected date in the title
     datatitlu.text(datePicker.data('DateTimePicker').viewDate().format('l'));
 
-    $.post(URLRoot+'table/get-records-json/'+selectedDateISO(), null, recordsReturned);
+    $.post(URLRoot+'registru/get-records-json/'+selectedDateISO(), null, recordsReturned);
 }
 function updateFurnizori(){
-    serverData.furnizori= JSON.parse(remote(URLRoot+'table/get-furnizori-json'));
+    serverData.furnizori= JSON.parse(remote(URLRoot+'registru/get-furnizori-json'));
     updateFurnizoriDatalists();
 }
 //ajax callback for requestNewRecord
@@ -167,10 +167,10 @@ function endDayDone(data){
 function endDay(){
     if(!editAllowed()) return logOut();
     showHide(end_day, false);
-    $.post(URLRoot+'table/new_day', null, endDayDone);
+    $.post(URLRoot+'registru/new_day', null, endDayDone);
 }
 function getTotals(){
-    serverData.totals= JSON.parse(remote(URLRoot+'table/get-total-json/'+serverData.zi.ID));
+    serverData.totals= JSON.parse(remote(URLRoot+'registru/get-total-json/'+serverData.zi.ID));
 }
 //bound to tdAport.click
 function requestAportDeletion(){
@@ -213,7 +213,7 @@ function updateTotals(){
 function requestNewSoldInitial(){
     var output= remote(URLRoot+'action/edit-sold-initial/'+serverData.zi.ID+'/'+$('#edit_sold_initial').val());
     if(output.trim()!='') alert(output); //debugging
-    serverData= JSON.parse( remote(URLRoot+'table/get-records-json/'+selectedDateISO()) );
+    serverData= JSON.parse( remote(URLRoot+'registru/get-records-json/'+selectedDateISO()) );
     populatePage();
     $('#sold_initial_popup').modal('hide');
 }

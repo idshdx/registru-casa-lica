@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/receptii.js"></script>
     <title>Recepţii</title>
 </head>
 <body>
@@ -44,7 +45,9 @@
                     <tr>
                         <td class="bold">DATA</td>
                         <td class="bold">NOTA DE Recepţie NR.</td>
-                        <td rowspan="2"><h4 class="bold">SC LICA SRL<br />Recepţie {TVA}%</h4></td>
+                        <td rowspan="2">
+                            <h4 class="bold">SC LICA SRL<br />Recepţie <span class="procentaj_tva">0</span>%</h4>
+                        </td>
                         <td class="bold">Furnizor</td>
                         <td class="bold">Nr. Facturii sau Avizului</td>
                         <td class="bold action">Acţiune</td>
@@ -56,7 +59,7 @@
                         <td><input type="text" class="form-control usr-input button"></td>
                         <td class="action">
                             <button class="btn btn-success btn-sm">
-                                <span class="glyphicon glyphicon-plus"></span> Salvează
+                                <span class="glyphicon glyphicon-ok"></span> Salvează
                             </button>
                         </td>
                     </tr>
@@ -108,7 +111,7 @@
                         <td><input type="text" class="form-control usr-input"></td>
                         <td>
                             <button class="btn btn-success btn-sm">
-                                <span class="glyphicon glyphicon-plus"></span> Salvează
+                                <span class="glyphicon glyphicon-ok"></span> Salvează
                             </button>
                         </td>
                     </tr>

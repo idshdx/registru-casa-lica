@@ -145,3 +145,6 @@ input {
 #logout {
 	min-width: 85px;
 }
+.template_receptie{
+    display: none;
+}
