@@ -86,7 +86,7 @@ class Registru extends CI_Controller {
           $date = $this->date_model->get_date_by_id($idzi);
 
           //check to see if the date inserted is the first date of any month(if there is a match, insert sold initial)
-          if($date == date_first_day( $this->date_model->last_day_id() ) ) {
+          if($date == $this->date_model->date_first_day( $this->date_model->last_day_id() ) ) {
             //Compute the initial sold
               $soldchelt = $this->calcul_model->cumul('SumeCheltuieli', $idzi);
               $soldmarfa9 = $this->calcul_model->cumul('SumeMarfaTVA9', $idzi);
