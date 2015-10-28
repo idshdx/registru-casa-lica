@@ -31,7 +31,7 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#">Registru de Casă</a></li>
 					<li><a href="receptii.html">Recepţii</a></li>
-                    <li><a href="aviz.html">Aviz de Predare</a></li>
+					<li><a href="aviz.html">Aviz de Predare</a></li>
 				</ul>
 				<div class="navbar-form navbar-left">
 				    <div class="form-group widget">
@@ -192,10 +192,12 @@
 			</tbody>
 		</table>
 
-		<table id="tabel_Aport" class="table table-bordered table-hover text-center">
+		<table id="tabel_Aport" class="table table-bordered text-center">
 			<tbody>
 				<tr>
-                    <td class="template_cell display_cell"></td>
+                    <td class="deleteable template_cell display_cell" title="Sterge">
+                        <span class="aport">630.00</span> <span class="glyphicon glyphicon-remove action"></span>
+                    </td>
 					<td>Monetare / Aport Capital</td>
 					<td class="input_cell"><input id="input_aport" class="form-control screen usr-input" type="text"></td>
 					<td>Sold Total Încasări</td>
@@ -251,7 +253,7 @@
                 <div class="modal-footer">
                     <form class="form-inline">
                         <button type="button" class="btn btn-default" style="width:10em" data-dismiss="modal">Înapoi</button>
-                        <button type="button" class="btn btn-primary" style="width:10em" id="request_new_sold_initial">Actualizează!</button>
+                        <button type="button" class="btn btn-primary" style="width:10em" id="request_new_sold_initial">Actualizează</button>
                     </form>
                 </div>
             </div>
