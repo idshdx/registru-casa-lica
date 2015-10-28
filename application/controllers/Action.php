@@ -65,7 +65,8 @@ class Action extends CI_Controller {
              
      }
 
-     public function delete_record($table, $id, $idzi) {
+     public function delete_record($table, $id) {
+        $idzi = $this->main_model->get_record_by_id($table, $id)['IDZi'];
         if(!$this->session_check($idzi)) return;
         $this->main_model->delete_record($table, $id);      
      }
