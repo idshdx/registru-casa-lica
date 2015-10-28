@@ -259,8 +259,5 @@
             </div>
         </div>
     </div>
-
-
-	<footer class="page-space"><p>Copyright © 2015 SC LICA SRL. Toate drepturile rezervate.</p></footer>
 </body>
 </html>

@@ -163,6 +163,7 @@ function endDayDone(data){
     datePicker.data('DateTimePicker').maxDate(newLastDay);
 
     showHide(printButton, true);
+    editMode(editAllowed());
 }
 function endDay(){
     if(!editAllowed()) return logOut();
@@ -219,7 +220,7 @@ function requestNewSoldInitial(){
 }
 function logout(){
     remote(URLRoot+'logout');
-    redirect(URLRoot+'table');
+    redirect(URLRoot+'registru');
 }
 /***
  * DOM retrieval
