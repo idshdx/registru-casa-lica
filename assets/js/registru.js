@@ -68,7 +68,7 @@ function validateRecordData(recordData){
     return (recordData.Suma!='' && recordData.Furnizor!='')
 }
 function requestRecordDelete(recordID){
-    remote(URLRoot+'action/delete-record/Sume'+currentTableType+'/'+recordID+'/'+serverData.zi.ID);
+    remote(URLRoot+'action/delete-record/Sume'+currentTableType+'/'+recordID);
     updateTotals();
 }
 function recordUpdated(data) {
@@ -172,14 +172,28 @@ function endDay(){
 function getTotals(){
     serverData.totals= JSON.parse(remote(URLRoot+'table/get-total-json/'+serverData.zi.ID));
 }
+//bound to tdAport.click
+function requestAportDeletion(){
+    if(!editAllowed()) return redirect('login');
+    currentTableType= "Aport";
+    var idRecord= this.dbid;
+    serverData.Aport.forEach(function(aport, i){
+        if(aport.ID==idRecord) serverData.Aport.splice(i, 1);
+    });
+    requestRecordDelete(idRecord);
+    $(this).remove();
+}
 function displayAport(jsoAport){
-    aportTemplate.clone().insertBefore(inputAport.parent())
-        .removeClass('template_cell')
-        .text(decimal(jsoAport.Suma))
-        [0].dbid= jsoAport.ID;
+    var td= aportTemplate.clone().removeClass('template_cell').insertBefore(inputAport.parent());
+    td[0].dbid= jsoAport.ID;
+    td.children('span.aport').text(decimal(jsoAport.Suma));
+    if(editAllowed())
+        td.click(requestAportDeletion);
+    else td.removeClass('deleteable');
 }
 function aportAdded(data){
     //alert(data); //debugging
+    //order matters
     newAport= JSON.parse(data);
     serverData.Aport.push(newAport);
     console.log(serverData);
