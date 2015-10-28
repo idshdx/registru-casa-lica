@@ -77,10 +77,29 @@ class Main extends CI_Controller {
 
 
      public function new_day(){
-          //insert the next date
+
+          //insert the next date(to use in last_day_id())
           $this->date_model->new_day(); 
+
+          //get the date of the last id(the inserted date)
+          $idzi = $this->date_model->last_day_id();
+          $date = $this->date_model->get_date_by_id($idzi);
+
+          //check to see if the date inserted is the first date of any month(if there is a match, insert sold initial)
+          if($date == date_first_day( $this->date_model->last_day_id() ) ) {
+            //Compute the initial sold
+              $soldchelt = $this->calcul_model->cumul('SumeCheltuieli', $idzi);
+              $soldmarfa9 = $this->calcul_model->cumul('SumeMarfaTVA9', $idzi);
+              $soldmarfa24 = $this->calcul_model->cumul('SumeMarfaTVA9', $idzi);
+              $soldaport = $this->calcul_model->cumul('SumeMarfaTVA9', $idzi);
+              $soldinitial =  $this->soldinitial_model->get_sold_initial($idzi);
+              $soldfinal = $soldinitial + $soldaport - $soldchelt - $soldmarfa9 - $soldmarfa24;
+              //Insert sold initial into the db
+              $this->soldinitial_model->new_sold_initial($soldfinal);
+          }
           // echo the new date inserted
-          echo json_encode(['new_last_day' => $this->parsed_date_to_string( $this->date_model->get_date_by_id($this->date_model->last_day_id() ) ) ] );      
+          echo json_encode(['new_last_day' => 
+            $this->parsed_date_to_string( $this->date_model->get_date_by_id(  $this->date_model->last_day_id() ) ) ] );      
      }
 
      //$date(date array) = result of call to date_parse

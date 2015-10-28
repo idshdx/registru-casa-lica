@@ -11,7 +11,7 @@ class Action extends CI_Controller {
     }
 
     public function index() {
-     var_dump($this->main_model->get_last_aport(5));
+     $this->date_model->new_day();
       
     }
 
