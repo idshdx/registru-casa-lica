@@ -61,6 +61,16 @@ class main_model extends CI_Model {
         return $final;
     }
 
+    public function idzi_by_id($table, $id) {
+        $query = "SELECT IDZi from $table WHERE ID = $id;";
+
+        $result = $this->db->query($query)->result_array();
+        if(isset($result[0]['IDZi'])) {
+            return (int)$result[0]['IDZi']; 
+        }
+            return  false; 
+    }
+
     public function new_record($table, $data) {
          $this->db->insert($table, $data);
 	}

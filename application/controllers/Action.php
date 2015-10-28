@@ -65,10 +65,19 @@ class Action extends CI_Controller {
              
      }
 
+     private function delete($table, $id) {
+        $idzi = $this->main_model->idzi_by_id($table, $id);
+        
+        if(is_null($idzi) || $this->session_check($idzi)) {
+
+          $this->main_model->delete_record($table, $id); 
+          return true;     
+        } 
+        return false;
+     }
+
      public function delete_record($table, $id) {
-        $idzi = $this->main_model->get_record_by_id($table, $id)['IDZi'];
-        if(!$this->session_check($idzi)) return;
-        $this->main_model->delete_record($table, $id);      
+        echo $this->delete($table, $id);
      }
 
      public function edit_sold_initial($idzi, $sum) {
