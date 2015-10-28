@@ -27,7 +27,7 @@ class Login extends CI_Controller {
 
               if($is_user) {
               	$this->make_session($username, $password);
-              	redirect(site_url('main/'));
+              	redirect(site_url('registru/'));
               } else {
                 $this->session->set_flashdata('error', 'Invalid Username or Password!');
               	redirect(site_url('login/'));
