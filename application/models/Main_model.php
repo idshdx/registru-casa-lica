@@ -72,9 +72,8 @@ class main_model extends CI_Model {
 		$this->db->update($table);	
 	}
 
-	public function delete_record($table, $id, $idzi) {
+	public function delete_record($table, $id) {
         $this->db->where('id', $id);
-		$this->db->where('idzi', $idzi);
 		$this->db->delete($table);
 	}
 
