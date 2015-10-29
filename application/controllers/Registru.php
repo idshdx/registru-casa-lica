@@ -76,8 +76,7 @@ class Registru extends CI_Controller {
      }
 
 
-     public function new_day(){
-
+     public function new_day(){ 
           //insert the next date(to use in last_day_id())
           $this->date_model->new_day(); 
 
@@ -85,21 +84,26 @@ class Registru extends CI_Controller {
           $idzi = $this->date_model->last_day_id();
           $date = $this->date_model->get_date_by_id($idzi);
 
-          //check to see if the date inserted is the first date of any month(if there is a match, insert sold initial)
-          if($date == $this->date_model->date_first_day( $this->date_model->last_day_id() ) ) {
-            //Compute the initial sold
-              $soldchelt = $this->calcul_model->cumul('SumeCheltuieli', $idzi);
-              $soldmarfa9 = $this->calcul_model->cumul('SumeMarfaTVA9', $idzi);
-              $soldmarfa24 = $this->calcul_model->cumul('SumeMarfaTVA9', $idzi);
-              $soldaport = $this->calcul_model->cumul('SumeMarfaTVA9', $idzi);
-              $soldinitial =  $this->soldinitial_model->get_sold_initial($idzi);
-              $soldfinal = $soldinitial + $soldaport - $soldchelt - $soldmarfa9 - $soldmarfa24;
+           //Compute the initial sold
+          $soldchelt = (float)$this->calcul_model->cumul('SumeCheltuieli', (string)$idzi);
+          $soldmarfa9 = (float)$this->calcul_model->cumul('SumeMarfaTVA9', (string)$idzi);
+          $soldmarfa24 = (float)$this->calcul_model->cumul('SumeMarfaTVA9', (string)$idzi);
+          $soldaport = (float)$this->calcul_model->cumul('SumeMarfaTVA9', (string)$idzi);
+
+          $firstid = (int)$this->date_model->id_first_day_by_id($idzi-1);
+          $soldinitial =  (float)$this->soldinitial_model->get_sold_initial( $firstid )[0]['SoldInitial'];
+          $soldfinal = $soldinitial + $soldaport - $soldchelt - $soldmarfa9 - $soldmarfa24;
+
+           //check to see if the date inserted is the first day of any month(if there is a match, insert sold initial)
+          if($date['day'] == 1) {
               //Insert sold initial into the db
-              $this->soldinitial_model->new_sold_initial($soldfinal);
+              $toInsert = ['IDZi'=>$idzi, 'SoldInitial'=> $soldfinal];
+              $this->soldinitial_model->new_sold_initial($toInsert);
           }
           // echo the new date inserted
           echo json_encode(['new_last_day' => 
-            $this->parsed_date_to_string( $this->date_model->get_date_by_id(  $this->date_model->last_day_id() ) ) ] );      
+            $this->parsed_date_to_string( $this->date_model->get_date_by_id(  $this->date_model->last_day_id() ) ),
+                            'sold' => $soldfinal ] );      
      }
 
      //$date(date array) = result of call to date_parse

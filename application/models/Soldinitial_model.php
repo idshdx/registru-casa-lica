@@ -10,8 +10,8 @@ Class soldinitial_model extends CI_Model {
 	}
 
 	
-	public function new_sold_initial($sum) {
-    	$this->db->insert('Luni', $sum);
+	public function new_sold_initial($data) {
+    	$this->db->insert('Luni', $data);
 	}
 
 
@@ -25,7 +25,8 @@ Class soldinitial_model extends CI_Model {
 		$this->db->select('SoldInitial');
 		$this->db->where('IDZi', $idzi);
 
-		return floatval($this->db->get('Luni')->result_array()[0]['SoldInitial']);	
+		return $this->db->get('Luni')->result_array();	
+		
 	}
 
 	public function __destruct() {
