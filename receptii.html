@@ -36,13 +36,39 @@
 			</div>
 		</div>
 	</nav>
+    <table style="display: none;">
+        <tbody>
+            <tr id="template_row">
+                <td>Cascaval</td>
+                <td>Kg</td>
+                <td>99999.00</td>
+                <td>99999.00</td>
+                <td>99999.00</td>
+                <td>99999.00</td>
+                <td>99999.00</td>
+                <td>99999.00</td>
+                <td>99999.00</td>
+                <td class="action">
+                    <button class="btn btn-primary btn-xs">
+                        <span class="glyphicon glyphicon-pencil"></span> Editează
+                    </button>
+                    <button class="btn btn-success btn-sm hidden">
+                        <span class="glyphicon glyphicon-ok"></span> Salvează
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td id="template-input"><input type="text" class="form-control usr-input"></td>
+            </tr>
+        </tbody>
+    </table>
 
 	<div id="receptii" class="container">
         <br />
 		<div id="template_receptie">
             <table class="table table-bordered text-center">
                 <tbody>
-                    <tr>
+                    <tr class="receptie-header">
                         <td class="bold">DATA</td>
                         <td class="bold">NOTA DE Recepţie NR.</td>
                         <td rowspan="2">
@@ -58,7 +84,10 @@
                         <td><input type="text" class="form-control usr-input button"></td>
                         <td><input type="text" class="form-control usr-input button"></td>
                         <td class="action">
-                            <button class="btn btn-success btn-sm">
+                            <button class="btn btn-primary btn-xs hidden action-edit-header">
+                                <span class="glyphicon glyphicon-pencil"></span> Editează
+                            </button>
+                            <button class="btn btn-success btn-sm action-accept-header">
                                 <span class="glyphicon glyphicon-ok"></span> Salvează
                             </button>
                         </td>
@@ -82,34 +111,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr id="template_row">
-                        <td>Cascaval</td>
-                        <td>Kg</td>
-                        <td>99999.00</td>
-                        <td>99999.00</td>
-                        <td>99999.00</td>
-                        <td>99999.00</td>
-                        <td>99999.00</td>
-                        <td>99999.00</td>
-                        <td>99999.00</td>
-                        <td class="action" title="Editează">
-                            <button class="btn btn-primary btn-xs">
+
+                    <tr>
+                        <td><input type="text" class="form-control usr-input"></td>
+                        <td><input type="text" class="form-control usr-input"></td>
+                        <td><input type="text" class="form-control usr-input"></td>
+                        <td><input type="text" class="form-control usr-input"></td>
+                        <td><input type="text" class="form-control usr-input"></td>
+                        <td><input type="text" class="form-control usr-input"></td>
+                        <td><input type="text" class="form-control usr-input"></td>
+                        <td><input type="text" class="form-control usr-input"></td>
+                        <td><input type="text" class="form-control usr-input"></td>
+                        <td class="action">
+                            <button class="btn btn-primary btn-xs hidden">
                                 <span class="glyphicon glyphicon-pencil"></span> Editează
                             </button>
-                        </td>
-                    </tr>
-
-                    <tr class="button">
-                        <td><input type="text" class="form-control usr-input"></td>
-                        <td><input type="text" class="form-control usr-input"></td>
-                        <td><input type="text" class="form-control usr-input"></td>
-                        <td><input type="text" class="form-control usr-input"></td>
-                        <td><input type="text" class="form-control usr-input"></td>
-                        <td><input type="text" class="form-control usr-input"></td>
-                        <td><input type="text" class="form-control usr-input"></td>
-                        <td><input type="text" class="form-control usr-input"></td>
-                        <td><input type="text" class="form-control usr-input"></td>
-                        <td>
                             <button class="btn btn-success btn-sm">
                                 <span class="glyphicon glyphicon-ok"></span> Salvează
                             </button>
@@ -118,7 +134,7 @@
                     <tr>
                         <td colspan="4" class="bold">Total</td>
                         <td class="bold bigfont">0.00</td>
-                        <td class="bold "></td>
+                        <td class="bold"></td>
                         <td class="bold bigfont">0.00</td>
                         <td class="bold"></td>
                         <td class="bold bigfont">0.00</td>
