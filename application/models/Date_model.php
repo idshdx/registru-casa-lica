@@ -8,14 +8,14 @@ class date_model extends CI_Model {
     }
 
     //Returns date as an array(date_parse) by IDZi
-    public function get_date_by_id($idzi) {
+    public function date_by_id($idzi) {
     	$query = "SELECT Data FROM Zile WHERE ID = $idzi ;";
 
     	return date_parse($this->db->query($query)->result_array()[0]['Data']);
     }
 
     //Returns date+ID as an array by IDZi
-    public function get_id_and_date($idzi) {
+    public function id_and_date($idzi) {
         $query = "SELECT * FROM Zile WHERE ID = $idzi ;";
         $result = $this->db->query($query)->result_array();
         $final = ['ID' => intval($result[0]['ID']), 'Data' => $result[0]['Data']];
@@ -24,8 +24,8 @@ class date_model extends CI_Model {
     }
     
     //Returns the ID of the first day of the month by IDZi
-    public function id_first_day_by_id($idzi) {
-    	$data = $this->get_date_by_id($idzi);
+    public function first_day_of_month($idzi) {
+    	$data = $this->date_by_id($idzi);
     	$year = $data['year'];
     	$month = $data['month']; 	
     	$query = "SELECT ID FROM Zile WHERE Data = STR_TO_DATE('$year,$month,1','%Y,%m,%d');";
@@ -33,10 +33,10 @@ class date_model extends CI_Model {
     	return $this->db->query($query)->result_array()[0]['ID'];
     }
 
-    //Returns the Date of the first day of the month by IDzi.Depends on get_date_by_id()
-    public function date_first_day($idzi) {
-    	$year = $this->get_date_by_id($idzi)['year'];
-        $month = $this->get_date_by_id($idzi)['month'];
+    //Returns the Date of the first day of the month by IDzi.Depends on date_by_id()
+    public function date_first_day_of_month($idzi) {
+    	$year = $this->date_by_id($idzi)['year'];
+        $month = $this->date_by_id($idzi)['month'];
     	$query = "SELECT Data FROM Zile WHERE Data = STR_TO_DATE('$year, $month,1' ,'%Y,%m,%d')";
 
     	return date_parse($this->db->query($query)->result_array()[0]['Data']);
@@ -48,7 +48,7 @@ class date_model extends CI_Model {
         return $this->db->query($query)->result_array()[0]['ID'];
     }
 
-    public function first_day_ever() {
+    public function first_day_db_entry() {
         $query = "SELECT Data FROM Zile ORDER BY DATA LIMIT 1";
 
         return date_parse($this->db->query($query)->result_array()[0]['Data']);

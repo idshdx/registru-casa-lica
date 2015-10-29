@@ -25,7 +25,7 @@ Class soldinitial_model extends CI_Model {
 		$this->db->select('SoldInitial');
 		$this->db->where('IDZi', $idzi);
 
-		return $this->db->get('Luni')->result_array();	
+		return $this->db->get('Luni')->result_array()[0]['SoldInitial'];	
 		
 	}
 

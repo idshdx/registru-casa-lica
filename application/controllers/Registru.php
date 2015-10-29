@@ -21,10 +21,10 @@ class Registru extends CI_Controller {
           echo json_encode($this->get_total($idzi));
      }
      private function get_total($idzi) {
-         return ['Cheltuieli'=>$this->calcul_model->get_amount_by_day('SumeCheltuieli', $idzi), 
-                    'MarfaTVA9'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA9', $idzi),
-                    'MarfaTVA24'=> $this->calcul_model->get_amount_by_day('SumeMarfaTVA24', $idzi), 
-                    'Aport'=> $this->calcul_model->get_amount_by_day('SumeAport', $idzi)];
+         return ['Cheltuieli'=>$this->calcul_model->ammount_by_day('SumeCheltuieli', $idzi), 
+                    'MarfaTVA9'=> $this->calcul_model->ammount_by_day('SumeMarfaTVA9', $idzi),
+                    'MarfaTVA24'=> $this->calcul_model->ammount_by_day('SumeMarfaTVA24', $idzi), 
+                    'Aport'=> $this->calcul_model->ammount_by_day('SumeAport', $idzi)];
      }
 
      public function get_records_json($data) {
@@ -39,17 +39,25 @@ class Registru extends CI_Controller {
           $marfa24 = $this->main_model->get_records('SumeMarfaTVA24', $idzi);
           $aport = $this->main_model->get_records('SumeAport', $idzi);
 
-          $soldinitial = $this->soldinitial_model->get_sold_initial($this->date_model->id_first_day_by_id($idzi));
-          $zi = $this->date_model->get_id_and_date($idzi);
-          $first_date = $this->parsed_date_to_string($this->date_model->first_day_ever());     
+          $soldinitial_luna = (float)$this->soldinitial_model->get_sold_initial((int)$this->date_model->first_day_of_month($idzi));
+          $sold_aport = floatval($this->calcul_model->cumul('SumeAport', $idzi));
+          $sold_chelt = floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi));
+          $sold_marfa9 = floatval($this->calcul_model->cumul('SumeMarfaTVA9', $idzi));
+          $sold_marfa24 = floatval($this->calcul_model->cumul('SumeMarfaTVA24', $idzi));
+
+          $soldinitial_zi = $soldinitial_luna + $sold_aport - $sold_chelt - $sold_marfa9 - $sold_marfa24;
+
+
+
+          $zi = $this->date_model->id_and_date($idzi);
+          $first_date = $this->parsed_date_to_string($this->date_model->first_day_db_entry());     
           $furnizori = $this->get_furnizori();
 
           $calcule = ['Cheltuieli' => floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi)),
                       'MarfaTVA9' => floatval($this->calcul_model->cumul('SumeMarfaTVA9', $idzi)), 
                       'MarfaTVA24' => floatval($this->calcul_model->cumul('SumeMarfaTVA24', $idzi)), 
-                      'Aport' => floatval($this->calcul_model->cumul('SumeAport', $idzi)), 
-                      'soldinitial' => floatval($soldinitial) - floatval($this->calcul_model->cumul('SumeCheltuieli', $idzi))
-                      - floatval($this->calcul_model->cumul('SumeMarfaTVA24', $idzi)) + floatval($this->calcul_model->cumul('SumeAport', $idzi))];
+                      'Aport' => floatval($this->calcul_model->cumul('SumeAport', $idzi)),
+                      'soldinitial' => $soldinitial_zi ];
           
           return ['Cheltuieli' => $chelt, 
                     'MarfaTVA9' => $marfa9, 
@@ -82,7 +90,7 @@ class Registru extends CI_Controller {
 
           //get the date of the last id(the inserted date)
           $idzi = $this->date_model->last_day_id();
-          $date = $this->date_model->get_date_by_id($idzi);
+          $date = $this->date_model->date_by_id($idzi);
 
            //Compute the initial sold
           $soldchelt = (float)$this->calcul_model->cumul('SumeCheltuieli', (string)$idzi);
@@ -90,19 +98,19 @@ class Registru extends CI_Controller {
           $soldmarfa24 = (float)$this->calcul_model->cumul('SumeMarfaTVA9', (string)$idzi);
           $soldaport = (float)$this->calcul_model->cumul('SumeMarfaTVA9', (string)$idzi);
 
-          $firstid = (int)$this->date_model->id_first_day_by_id($idzi-1);
+          $firstid = (int)$this->date_model->first_day_of_month($idzi-1);
           $soldinitial =  (float)$this->soldinitial_model->get_sold_initial( $firstid )[0]['SoldInitial'];
           $soldfinal = $soldinitial + $soldaport - $soldchelt - $soldmarfa9 - $soldmarfa24;
 
            //check to see if the date inserted is the first day of any month(if there is a match, insert sold initial)
           if($date['day'] == 1) {
               //Insert sold initial into the db
-              $toInsert = ['IDZi'=>$idzi, 'SoldInitial'=> $soldfinal];
+              $toInsert = ['IDZi'=>$idzi, 'SoldInitial'=> 0];
               $this->soldinitial_model->new_sold_initial($toInsert);
           }
           // echo the new date inserted
           echo json_encode(['new_last_day' => 
-            $this->parsed_date_to_string( $this->date_model->get_date_by_id(  $this->date_model->last_day_id() ) ),
+            $this->parsed_date_to_string( $this->date_model->date_by_id(  $this->date_model->last_day_id() ) ),
                             'sold' => $soldfinal ] );      
      }
 
