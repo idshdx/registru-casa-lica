@@ -130,7 +130,7 @@ class Registru extends CI_Controller {
               $this->soldinitial_model->new_sold_initial($toInsert);
           }
 
-          echo json_encode(['new_last_day'=> $newzi]);
+          echo json_encode(['new_last_day'=> $date]);
      }
 
      //$date(date array) = result of call to date_parse
