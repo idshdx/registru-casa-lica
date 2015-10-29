@@ -18,7 +18,7 @@ class calcul_model extends CI_Model {
     public function cumul($tabel, $idzi) {
         $previdzi = $idzi-1;
         $this->load->model('date_model');
-        $firstid = $this->date_model->first_day_of_month($idzi);
+        $firstid = $this->date_model->first_day_of_month($idzi-1);
         $query = "SELECT Sum(Suma) as Suma FROM $tabel WHERE IDZi BETWEEN $firstid AND $previdzi";
         
         return $this->db->query($query)->result_array()[0]['Suma'];
