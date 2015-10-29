@@ -18,12 +18,6 @@
         background-color: #fff;
         box-shadow: 0 8px 17px rgba(0, 0, 0, .2);
     }
-    footer {
-        margin-top: 25px;
-    }
-    .page-space {
-        margin-top: 22%;
-    }
 }
 .bold {
     font-weight: bold;
@@ -145,6 +139,6 @@ input {
 #logout {
 	min-width: 85px;
 }
-.template_receptie{
+#template_receptie{
     display: none;
 }
