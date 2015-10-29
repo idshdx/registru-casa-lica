@@ -33,7 +33,7 @@ class Registru extends CI_Controller {
      }
 
      private function get_records($idzi) {
-
+          $currentid = $idzi+1;
           $chelt = $this->main_model->get_records('SumeCheltuieli', $idzi);
           $marfa9 = $this->main_model->get_records('SumeMarfaTVA9', $idzi);
           $marfa24 = $this->main_model->get_records('SumeMarfaTVA24', $idzi);
@@ -99,13 +99,14 @@ class Registru extends CI_Controller {
           $soldmarfa24 = (float)$this->calcul_model->cumul('SumeMarfaTVA24', (string)$idzi);
           $soldaport = (float)$this->calcul_model->cumul('SumeAport', (string)$idzi);
 
-          $firstid = (int)$this->date_model->first_day_of_month($idzi-1);
+
+          $firstid = (int)$this->date_model->first_day_of_month($idzi -1);
 
           $soldinitial_la_inceput =  (float)$this->soldinitial_model->get_sold_initial( $firstid );
 
-          $finalday = $this->get_total($idzi)['Aport'] - $this->get_total($idzi)['Cheltuieli'] - $this->get_total($idzi)['MarfaTVA9'] - $this->get_total($idzi)['MarfaTVA24'];
+          /*$finalday = $this->get_total($idzi)['Aport'] - $this->get_total($idzi)['Cheltuieli'] - $this->get_total($idzi)['MarfaTVA9'] - $this->get_total($idzi)['MarfaTVA24'];*/
 
-          $soldfinal_zi = $soldinitial_la_inceput + $soldaport - $soldchelt - $soldmarfa9 - $soldmarfa24 + $finalday;
+          $soldfinal_zi = $soldinitial_la_inceput + $soldaport - $soldchelt - $soldmarfa9 - $soldmarfa24;
 
           /*var_dump($soldfinal_zi);*/
            //check to see if the date inserted is the first day of any month(if there is a match, insert sold initial)

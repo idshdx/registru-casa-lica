@@ -25,6 +25,12 @@ class date_model extends CI_Model {
     
     //Returns the ID of the first day of the month by IDZi
     public function first_day_of_month($idzi) {
+        if($idzi == 0) {
+            $query = "SELECT ID FROM Zile ORDER BY Data ASC LIMIT 1";
+
+            return $this->db->query($query)->result_array()[0]['ID'];
+        }
+
     	$data = $this->date_by_id($idzi);
     	$year = $data['year'];
     	$month = $data['month']; 	
