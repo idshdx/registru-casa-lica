@@ -68,7 +68,6 @@ class date_model extends CI_Model {
         $query = "INSERT INTO Zile (Data) VALUES('$newdate');";
 
         return $this->db->query($query);
-        
     }	
 
     public function __destruct() {
