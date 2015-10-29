@@ -20,6 +20,8 @@ class calcul_model extends CI_Model {
         $this->load->model('date_model');
         $firstid = $this->date_model->first_day_of_month($idzi);
 
+        if($firstid == $idzi) return 0;
+
         $query = "SELECT Sum(Suma) as Suma FROM $tabel WHERE IDZi BETWEEN $firstid AND $previdzi";
         
         return $this->db->query($query)->result_array()[0]['Suma'];
