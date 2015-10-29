@@ -86,7 +86,7 @@ class Registru extends CI_Controller {
 
 
      public function new_day(){ 
-          /*//get the last ID entry
+          //get the last ID entry
           $idzi = $this->date_model->last_day_id();
           
            //Compute the initial sold
@@ -94,7 +94,10 @@ class Registru extends CI_Controller {
           $soldmarfa9 = (float)$this->calcul_model->cumul('SumeMarfaTVA9', (string)$idzi);
           $soldmarfa24 = (float)$this->calcul_model->cumul('SumeMarfaTVA24', (string)$idzi);
           $soldaport = (float)$this->calcul_model->cumul('SumeAport', (string)$idzi);
-          $soldinitial_la_inceput = (float)$this->soldinitial_model->get_sold_initial( $idzi );
+
+          $soldinitial_la_inceput = $this->soldinitial_model->get_sold_initial( $this->date_model->first_day_of_month($idzi) );
+
+          $soldpenultimazi = $soldinitial_la_inceput + $soldaport - $soldchelt - $soldmarfa9 - $soldmarfa24;
 
           //insert the next date(to use in last_day_id())
           $this->date_model->new_day();
@@ -103,9 +106,9 @@ class Registru extends CI_Controller {
 
           $sold_azi = $this->get_total($idzi)['Aport'] - $this->get_total($idzi)['MarfaTVA9'] - $this->get_total($idzi)['MarfaTVA24'] - $this->get_total($idzi)['Cheltuieli'];
 
-          $soldfinal_zi = $soldinitial_la_inceput + $soldaport - $soldchelt - $soldmarfa9 - $soldmarfa24 + $sold_azi;
+          $soldfinal_zi = $soldpenultimazi + $sold_azi;
       
-        
+          /*var_dump($soldfinal_zi);*/
           //check to see if the date inserted is the first day of any month(if there is a match, insert sold initial)
           if($date['day'] == 1) {
 
@@ -116,10 +119,10 @@ class Registru extends CI_Controller {
           // echo the new date inserted
           echo json_encode(['new_last_day' => 
             $this->parsed_date_to_string( $this->date_model->date_by_id(  $this->date_model->last_day_id() ) ),
-                            'sold' => $soldfinal_zi ] );   */
+                            'sold' => $soldfinal_zi ] );   
 
 
-          //insert the next date(to use in last_day_id())
+         /* //insert the next date(to use in last_day_id())
           $this->date_model->new_day();
           $newzi = $this->date_model->last_day_id();
           $date = $this->date_model->date_by_id($newzi); 
@@ -132,7 +135,7 @@ class Registru extends CI_Controller {
           }
 
           echo json_encode(['new_last_day' => 
-            $this->parsed_date_to_string( $this->date_model->date_by_id(  $this->date_model->last_day_id() ) )] );
+            $this->parsed_date_to_string( $this->date_model->date_by_id(  $this->date_model->last_day_id() ) )] );*/
      }
 
      //$date(date array) = result of call to date_parse
