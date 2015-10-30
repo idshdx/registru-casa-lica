@@ -1,16 +1,37 @@
+
+function subtractDecimals(dpDec1, dpDec2){
+    return (dpDec1*100 - dpDec2*100)/100;
+}
 function hide(el){
     el.addClass('hidden');
 }
 function show(el){
     el.removeClass('hidden');
 }
-function see(el, visible){
+function display(el, visible){
     if(visible) show(el); else hide(el);
+}
+function colIndex(colName){
+  return els.columns.indexOf(colName);
+}
+function cellData(tr, colName){
+  return tr.children('td').eq(els.columns.indexOf(colName)).text();
 }
 function initGlobalVars(){
     els.templateReceptie= $('#template_receptie');
     els.endOfReceptii= $('#end_of_receptii');
     els.inputTemplate= $('#template-input').html();
+    els.columns= ['marfa','um','cantitate','pretFurnizor','valFurnizor','pretAdaos','valAdaos','pretTVA','valTVA']
+}
+// an object that stores values associated with a (jQuery) DOM element
+// we set this object as a custom DOM property, for persistence between function calls
+function customData(element){
+    if(!element[0].customData) element[0].customData= {};
+    return element[0].customData;
+}
+function bindEvents(){
+    customData( $('#receptie9').click(generateReceptie) ).tva= 9;
+    customData( $('#receptie24').click(generateReceptie) ).tva= 24;
 }
 // assigns a "customData" custom property to the jQuery object's associated DOM element
 function inputToText(){
@@ -19,18 +40,13 @@ function inputToText(){
     if( (!input.length) || input.length==0 ) return;
     var val= input.val();
     input.remove();
-    td.text(val);
+    if( td.hasClass('currency') ) displayCurrency( td, val.trim()=='' ? 0 : parseFloat(val) );
+    else td.text(val);
 }
 function textToInput(){
     var el= $(this);
     var val= el.text();
     $(els.inputTemplate).appendTo(el.text('')).val(val);
-}
-// an object that stores values associated with a (jQuery) DOM element
-// we set this object as a custom DOM property, for persistence between function calls
-function customData(element){
-    if(!element[0].customData) element[0].customData= {};
-    return element[0].customData;
 }
 function editButton(tr){
     return tr.children('td.action').children('button.btn-primary');
@@ -38,27 +54,36 @@ function editButton(tr){
 function acceptButton(tr){
     return tr.children('td.action').children('button.btn-success');
 }
-function editRow(){
-    tr= $(this).parent().parent();
-    tr.children('td:not(.action)').each(textToInput);
-    show(acceptButton(tr));
-    hide(editButton(tr));
+
+function calcValues(tr){
+  var cells={}, values={}, td;
+  els.columns.forEach(function(colName, colIndex){
+    if( colName.startsWith('val')||colName.startsWith('val') ){
+      td= tr.children('td').eq(colIndex);
+      cells[colName]= td;
+      values[colName]= parseFloat( td.text() );
+    }
+  });
+  displayCurrency( cells.valFurnizor, values.cantitate+values.pretFurnizor );
 }
 function acceptChanges(){
     var tr= $(this).parent().parent();
-    tr.children('td').each(inputToText);
-    hide(acceptButton(tr));
-    show(editButton(tr));
+    tr.children('td').has('input').each(inputToText);
+    hide( acceptButton(tr) );
+    show( editButton(tr) );
+    calcValues(tr);
+    displayTotals( tr.parent() );
 }
 function clearInputs(tr){
     tr.children('td:not(.action)').children('input').val('');
 }
 function acceptRow(){
     var trInput= $(this).parent().parent();
-    var tr= trInput.clone().insertBefore(trInput);
+    var tr= trInput.clone().insertBefore(trInput).removeClass('button').addClass('display');
     editButton(tr).click(editRow);
     acceptButton(tr).click(acceptChanges).click();
     clearInputs(trInput);
+    displayTotals( tr.parent() );
 }
 function editHeader(){
     var tr= $(this).parent().parent();
@@ -77,9 +102,30 @@ function generateReceptie(){
     headerEdit.click(editHeader);
     receptie.find('button.btn-success:not(.action-accept-header)').click(acceptRow);
 }
-function bindEvents(){
-    customData( $('#receptie9').click(generateReceptie) ).tva= 9;
-    customData( $('#receptie24').click(generateReceptie) ).tva= 24;
+function sumColumn(TRs, colIndex){
+  var sum= 0;
+  for(var r= 0; r < TRs.length; r++){
+    sum+= parseFloat( TRs.eq(r).children('td').eq(colIndex).text() );
+  }
+  return sum;
+}
+function displayCurrency(element, decimal){
+  element.text( decimal.toFixed(2) );
+}
+function displayTotals(tbody){
+  var displayRows= tbody.children('tr.display');
+  var total5= sumColumn(displayRows, 4);
+  var total9= sumColumn(displayRows, 6);
+  var total11= sumColumn(displayRows, 8);
+  var totalAdaos= subtractDecimals( total9, total5 );
+  var totalTVA= subtractDecimals( total11, total9 );
+  var totalReceptie= (total5 + totalAdaos + totalTVA);
+  displayCurrency( tbody.find('.total5'), total5 );
+  displayCurrency( tbody.find('.total9'), total9 );
+  displayCurrency( tbody.find('.total11'), total11 );
+  displayCurrency( tbody.find('.total-adaos'), totalAdaos );
+  displayCurrency( tbody.find('.total-tva'), totalTVA );
+  displayCurrency( tbody.find('.total-receptie'), totalReceptie );
 }
 function pageLoaded($){
     window.els= {};
