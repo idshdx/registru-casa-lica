@@ -7,7 +7,6 @@ class Registru extends CI_Controller {
           parent::__construct();
           $this->load->model(['user_model', 'main_model', 'soldinitial_model', 'furnizori_model', 'date_model', 'calcul_model']);
           $this->load->helper('registru_helper');
-          $this->load->helper('url'); 
  
      }
 

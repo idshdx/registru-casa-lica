@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://lica.srl/';
+$config['base_url'] = '';
 
 /*
 |--------------------------------------------------------------------------

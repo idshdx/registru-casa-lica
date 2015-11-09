@@ -14,6 +14,16 @@
     #subtotal-border-left {
       border-left-style: none !important;
     }
+	.receptie-page-break { 
+		page-break-inside:avoid;
+		page-break-after:auto;
+	}
+	tr {
+		page-break-inside:avoid;
+	}
+	thead { 
+		display:table-header-group; 
+	}
 }
 @media screen {
     body {
@@ -36,7 +46,7 @@
     vertical-align: middle;
     padding: 3px;
 }
-.glyphicon-plus, .glyphicon-pencil, .glyphicon-calendar {
+.glyphicon-ok, .glyphicon-pencil, .glyphicon-calendar {
     color: #fff;
 }
 .glyphicon-remove {
@@ -120,7 +130,7 @@ footer > p {
 thead>tr:first-child, tbody>tr:last-child{
     font-weight: bold;
 }
-.template_row, .template_cell{
+.template_row, .template_cell, .template-aviz{
     display: none;
 }
 input {
@@ -150,7 +160,7 @@ input {
     display: none;
 }
 .empty-message {
-    margin-top: 16%;
+    margin-top: 15%;
 }
 #message {
     margin:25px 0 25px 0;
