@@ -55,7 +55,7 @@
 				</tr>
 			</tbody>
 		</table>
-        <table class="table table-bordered text-center pullup">
+        <table id="avize" class="table table-bordered text-center pullup">
             <thead>
                 <tr>
                     <th>Furnizor</th>
@@ -67,28 +67,31 @@
                     <th class="action">Acţiune</th>
                 </tr>
             </thead>
-            <tbody class="template-aviz">
-                <tr class="button">
+            <tbody>
+                <tr class="button input-row">
                     <td><input type="text" class="form-control usr-input"></td>
                     <td><input type="text" class="form-control usr-input"></td>
-                    <td><input type="text" class="form-control usr-input"></td>
-                    <td><input type="text" class="form-control usr-input"></td>
-                    <td><input type="text" class="form-control usr-input"></td>
-                    <td><input type="text" class="form-control usr-input"></td>
-                    <td>
+                    <td class="currency"><input type="text" class="form-control usr-input"></td>
+                    <td class="currency"><input type="text" class="form-control usr-input"></td>
+                    <td class="currency"><input type="text" class="form-control usr-input"></td>
+                    <td class="currency"><input type="text" class="form-control usr-input"></td>
+                    <td class="action">
+                        <button class="btn btn-primary btn-sm hidden">
+                            <span class="glyphicon glyphicon-pencil"></span> Editează
+                        </button>
                         <button class="btn btn-success btn-sm">
                             <span class="glyphicon glyphicon-ok"></span> Salvează
                         </button>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" id="subtotal-border-right"></td>
-                    <td colspan="3" class="bold" id="subtotal-border-left">Subtotal</td>
+                    <td colspan="2" class="subtotal-border-right"></td>
+                    <td colspan="3" class="bold subtotal-border-left">Subtotal</td>
                     <td class="bold">99999.00</td>
                 </tr>
             </tbody>
-            <tbody id="aviz-total-row">
-                <tr class="big-row">
+            <tbody id="aviz-total">
+                <tr id="aviz-total-row" class="big-row">
                     <td class="bold">Ştampila Unităţii</td>
                     <td class="bold">Semnătura de Primire</td>
                     <td colspan="3" class="bold">Total</td>

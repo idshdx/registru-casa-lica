@@ -1,4 +1,10 @@
 
+// an object that stores values associated with a (jQuery) DOM element
+// we set this object as a custom DOM property, for persistence between function calls
+function customData(element){
+    if(!element[0].customData) element[0].customData= {};
+    return element[0].customData;
+}
 function formatCurrency(nmbr){
     return nmbr.toFixed(2);
 }
@@ -45,14 +51,55 @@ function editHeader(){
 function initGlobals(){
     window.els= {
         headerRow: $('#header-data-row'),
-        inputTemplate: '<input class="form-control usr-input button" type="text">',
-        templateAviz: $('#template-aviz')
+        inputTemplate: '<input type="text" class="form-control usr-input button">',
+        templateAviz: '<tbody>' + $('#avize').children('tbody').first().html() + '<tbody>',
+        totalGeneral: $('#aviz-total'),
+        totalGenRow: $('#aviz-total-row')
     };
     window.gb= {};
+}
+function updateTotGen(){
+
+}
+function updateTotals(avizTBody){
+    updateTotGen();
+}
+function editRow(){
+    var tr= $(this).parent().parent();
+    hide(editButton(tr));
+    tr.children('td:not(.action)').each(textToInput);
+    show(acceptButton(tr));
+}
+function acceptChanges(){
+    var tr= $(this).parent().parent();
+    hide(acceptButton(tr));
+    tr.children('td').has('input').each(inputToText);
+    show(editButton(tr));
+    updateTotals(tr.parent())
+}
+function newAviz(inputRow){
+
+}
+function avizEmpty(inputRow){
+
+}
+function acceptRow(){
+    var inputRow= $(this).parent().parent();
+    newRow= inputRow.clone().removeClass('input-row');
+    var newFurnizor= newRow.children('td').has('input').children('input').eq(0).val().trim();
+    if(newFurnizor){
+
+    }
+    var aviz= inputRow.parent();
+    if(newFurnizor) aviz= $(els.templateAviz).insertAfter(aviz);
+    newRow.insertBefore( aviz.children('tr.input-row') );
+    hide( acceptButton(newRow).off('click').click(acceptChanges).click() );
+    show( editButton(newRow).click(editRow) );
 }
 function pageLoaded($){
     initGlobals();
     acceptButton(els.headerRow).click(acceptHeader);
     editButton(els.headerRow).click(editHeader);
+    acceptButton( $('#avize').children('tbody').first().children('tr.input-row') ).click(acceptRow);
 }
 jQuery(pageLoaded);

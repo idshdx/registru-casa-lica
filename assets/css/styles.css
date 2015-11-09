@@ -8,10 +8,10 @@
     .screen, .button, .save, .print, footer {
         display: none;
     }
-    #subtotal-border-right {
+    .subtotal-border-right {
       border-right-style: none !important;
     }
-    #subtotal-border-left {
+    .subtotal-border-left {
       border-left-style: none !important;
     }
 	.receptie-page-break { 
