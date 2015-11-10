@@ -52,17 +52,21 @@ function initGlobals(){
     window.els= {
         headerRow: $('#header-data-row'),
         inputTemplate: '<input type="text" class="form-control usr-input button">',
-        templateAviz: '<tbody>' + $('#avize').children('tbody').first().html() + '<tbody>',
-        totalGeneral: $('#aviz-total'),
-        totalGenRow: $('#aviz-total-row')
+        totalGeneral: $('#total'),
+        totalGenRow: $('#total-row'),
+        subtotalRowTemplate: $('#avize').children('tr.subtotal-row')[0].outerHTML
     };
     window.gb= {};
 }
-function updateTotGen(){
+function updateTotal(){
 
 }
-function updateTotals(avizTBody){
-    updateTotGen();
+function updateSubtotal(tr){
+    //todo
+    updateTotal();
+}
+function isFirstDataRow(){
+
 }
 function editRow(){
     var tr= $(this).parent().parent();
@@ -75,26 +79,35 @@ function acceptChanges(){
     hide(acceptButton(tr));
     tr.children('td').has('input').each(inputToText);
     show(editButton(tr));
-    updateTotals(tr.parent())
+    updateSubtotal(tr);
 }
-function newAviz(inputRow){
-
+function isNewSection(inputRow){
+    return !( inputRow.prev().hasClass('data-row') );
 }
-function avizEmpty(inputRow){
-
+function clearChildInput(){
+    $(this).children('input').val('');
+}
+function appendDataRow(inputRow){
+    var newDataRow= inputRow.clone().removeClass('input-row').addClass('data-row').insertBefore(inputRow);
+    if(isNewSection(newDataRow)) newDataRow.children('td').eq(0).remove();
+    editButton(newRow).click(editRow);
+    acceptButton(newRow).off('click').click(acceptChanges).click();
+    inputRow.children('td').has('input').each(clearChildInput);
+}
+function newSection(inputRow){
+    var newAvizInputRow= inputRow.clone().insertAfter(inputRow);
+    inputRow.children('td').has('input').each(clearChildInput);
+    $(els.subtotalRowTemplate).insertAfter(newAvizInputRow);
+    appendDataRow( newAvizInputRow );
 }
 function acceptRow(){
     var inputRow= $(this).parent().parent();
-    newRow= inputRow.clone().removeClass('input-row');
-    var newFurnizor= newRow.children('td').has('input').children('input').eq(0).val().trim();
-    if(newFurnizor){
-
-    }
-    var aviz= inputRow.parent();
-    if(newFurnizor) aviz= $(els.templateAviz).insertAfter(aviz);
-    newRow.insertBefore( aviz.children('tr.input-row') );
-    hide( acceptButton(newRow).off('click').click(acceptChanges).click() );
-    show( editButton(newRow).click(editRow) );
+    var newFurnizor= inputRow.children('td').has('input').children('input').eq(0).val().trim();
+    //ignore first insert if a furnizor is not provided
+    if(!( $('#avize').children('tr.data-row').length || !newFurnizor )) return;
+    //whenever a furnizor is provided, create a section (with its own provider and subtotal)
+    if(newFurnizor) newSection(inputRow);
+    else appendDataRow(inputRow);
 }
 function pageLoaded($){
     initGlobals();

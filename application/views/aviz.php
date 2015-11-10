@@ -55,7 +55,7 @@
 				</tr>
 			</tbody>
 		</table>
-        <table id="avize" class="table table-bordered text-center pullup">
+        <table class="table table-bordered text-center pullup">
             <thead>
                 <tr>
                     <th>Furnizor</th>
@@ -67,7 +67,7 @@
                     <th class="action">Acţiune</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="avize">
                 <tr class="button input-row">
                     <td><input type="text" class="form-control usr-input"></td>
                     <td><input type="text" class="form-control usr-input"></td>
@@ -84,18 +84,18 @@
                         </button>
                     </td>
                 </tr>
-                <tr>
+                <tr class="subtotal-row">
                     <td colspan="2" class="subtotal-border-right"></td>
                     <td colspan="3" class="bold subtotal-border-left">Subtotal</td>
                     <td class="bold">99999.00</td>
                 </tr>
             </tbody>
-            <tbody id="aviz-total">
-                <tr id="aviz-total-row" class="big-row">
+            <tbody>
+                <tr id="total-row" class="big-row">
                     <td class="bold">Ştampila Unităţii</td>
                     <td class="bold">Semnătura de Primire</td>
                     <td colspan="3" class="bold">Total</td>
-                    <td class="bold bigfont">99999.99</td>
+                    <td id="total" class="bold bigfont">99999.99</td>
                 </tr>
             </tbody>
         </table>
