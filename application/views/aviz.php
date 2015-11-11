@@ -76,7 +76,7 @@
                     <td class="currency"><input type="text" class="form-control usr-input"></td>
                     <td class="currency"><input type="text" class="form-control usr-input"></td>
                     <td class="action">
-                        <button class="btn btn-primary btn-sm hidden">
+                        <button class="btn btn-primary btn-xs hidden">
                             <span class="glyphicon glyphicon-pencil"></span> Editează
                         </button>
                         <button class="btn btn-success btn-sm">
@@ -84,13 +84,11 @@
                         </button>
                     </td>
                 </tr>
-                <tr class="subtotal-row">
+                <tr class="subtotal-row hidden">
                     <td colspan="2" class="subtotal-border-right"></td>
                     <td colspan="3" class="bold subtotal-border-left">Subtotal</td>
                     <td class="bold">99999.00</td>
                 </tr>
-            </tbody>
-            <tbody>
                 <tr id="total-row" class="big-row">
                     <td class="bold">Ştampila Unităţii</td>
                     <td class="bold">Semnătura de Primire</td>

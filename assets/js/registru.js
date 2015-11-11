@@ -269,6 +269,11 @@ function toggleEdit() {
     newrow[0].dbid= row[0].dbid;
     newrow.find('button').last().click(requestRecordUpdate);
     var cells= newrow.children('td');
+    cells.has('input').children().keydown(function(e) {
+        if (e.keyCode==40) {
+            $(this).parent().nextAll().has('input').first().children().focus();
+        }
+    });
     setInputValues(cells, row.children('td'), [0,1,2,3]);
     row.remove();
 }
@@ -471,5 +476,11 @@ function pageLoaded($) {
     constructDatalistsFurnizori();
 
     console.log(window.serverData);
+
+    $('input').keydown(function(e) {
+        if (e.keyCode==40) {
+            $(this).parent().nextAll().has('input').first().children().focus();
+        }
+    });
 }
 jQuery(pageLoaded);

@@ -21,10 +21,22 @@ function show(el){
 function display(el, visible){
     if(visible) show(el); else hide(el);
 }
+function sumColumn(TRs, colIndex){
+    var sum= 0;
+    for(var r= 0; r < TRs.length; r++){
+        sum+= parseFloat( TRs.eq(r).children('td').eq(colIndex).text() );
+    }
+    return sum;
+}
+function displayCurrency(element, decimal){
+    element.text( decimal.toFixed(2) );
+}
+/**
+ * page-specific
+ */
 function colIndex(colName){
   return els.columns.indexOf(colName);
 }
-
 function initGlobalVars(){
     els.receptii= $('#receptii');
     els.templateReceptie= $('#template_receptie');
@@ -34,7 +46,7 @@ function initGlobalVars(){
     els.message= $('#message');
 }
 function cellData(tr, colName){
-  return tr.children('td').eq(els.columns.indexOf(colName)).text();
+  return tr.children('td').eq( els.columns.indexOf(colName) ).text();
 }
 // an object that stores values associated with a (jQuery) DOM element
 // we set this object as a custom DOM property, for persistence between function calls
@@ -144,16 +156,6 @@ function generateReceptie(){
     receptie.find('button.btn-success:not(.action-accept-header)').click(acceptRow);
     els.receptii.css('margin-top', 'initial');
     hide(els.message);
-}
-function sumColumn(TRs, colIndex){
-  var sum= 0;
-  for(var r= 0; r < TRs.length; r++){
-    sum+= parseFloat( TRs.eq(r).children('td').eq(colIndex).text() );
-  }
-  return sum;
-}
-function displayCurrency(element, decimal){
-  element.text( decimal.toFixed(2) );
 }
 function displayTotals(tbody){
     var displayRows= tbody.children('tr.display');

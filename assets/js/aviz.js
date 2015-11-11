@@ -8,6 +8,18 @@ function customData(element){
 function formatCurrency(nmbr){
     return nmbr.toFixed(2);
 }
+//calculates the sum over the provided TRs at the specified column index (zero based, or negative (-1 means last)
+function colSum(TRs, colIndex){
+    if(!TRs.length) return 0;
+    var sum= 0, cells, cIndex;
+    for(var r= 0; r < TRs.length; r++){
+        cells= TRs.eq(r).children('td');
+        cIndex= colIndex;
+        if(colIndex<0) cIndex+= cells.length;
+        sum+= parseFloat( cells.eq(cIndex).text() );
+    }
+    return sum;
+}
 function inputToText(){
     var td= $(this);
     var input= td.children('input[type="text"]');
@@ -59,14 +71,14 @@ function initGlobals(){
     window.gb= {};
 }
 function updateTotal(){
-
+    subtotalRows= $('#avize').children('tr.subtotal-row');
+    els.totalGeneral.text( formatCurrency(colSum(subtotalRows, -1)) );
 }
 function updateSubtotal(tr){
-    //todo
+    var datarows= rowSectionDataRows(tr);
+    var subttotalDisplay= datarows.last().next().next().children(':not(.action)').last();
+    subttotalDisplay.text( formatCurrency(colSum(datarows,-2)) );
     updateTotal();
-}
-function isFirstDataRow(){
-
 }
 function editRow(){
     var tr= $(this).parent().parent();
@@ -87,24 +99,46 @@ function isNewSection(inputRow){
 function clearChildInput(){
     $(this).children('input').val('');
 }
+function rowSectionDataRows(datarow){
+    var prevDataRows= datarow.prevUntil(':not(.data-row)');
+    var nextDataRows= datarow.nextUntil(':not(.data-row)');
+    return prevDataRows.add(datarow).add(nextDataRows);
+}
+function updateRowSpan(inputOrDataRow){
+    sectionDataRows=  rowSectionDataRows(inputOrDataRow);
+    furnizorCell= sectionDataRows.first().children('td').first();
+    furnizorCell.attr('rowspan', sectionDataRows.length);
+}
 function appendDataRow(inputRow){
-    var newDataRow= inputRow.clone().removeClass('input-row').addClass('data-row').insertBefore(inputRow);
-    if(isNewSection(newDataRow)) newDataRow.children('td').eq(0).remove();
-    editButton(newRow).click(editRow);
-    acceptButton(newRow).off('click').click(acceptChanges).click();
+    var newDataRow= inputRow.clone().removeClass('input-row button').addClass('data-row').insertBefore(inputRow);
+    if(!isNewSection(newDataRow)) newDataRow.children('td').eq(0).remove();
+    editButton(newDataRow).click(editRow);
+    acceptButton(newDataRow).off('click').click(acceptChanges).click();
+    updateRowSpan(newDataRow);
     inputRow.children('td').has('input').each(clearChildInput);
 }
+function sectionsCount(){
+    return $('#avize').children('tr.subtotal-row').length;
+}
 function newSection(inputRow){
-    var newAvizInputRow= inputRow.clone().insertAfter(inputRow);
+    var newAvizInputRow= inputRow.clone().insertAfter(inputRow.next());
     inputRow.children('td').has('input').each(clearChildInput);
     $(els.subtotalRowTemplate).insertAfter(newAvizInputRow);
     appendDataRow( newAvizInputRow );
+    acceptButton(newAvizInputRow).off('click').click(acceptRow);
+    //remove the default empty section when using it to generate (clone) the first section (by completing a furnizor)
+    if( $('#avize').children('tr').first().hasClass('input-row') ) {
+        $('#avize').children('tr').first().remove(); //the input-row
+        $('#avize').children('tr').first().remove(); //the subtotal-row
+    }
+    if(sectionsCount() == 2) $('#avize').children('tr.subtotal-row').removeClass('hidden');
 }
 function acceptRow(){
     var inputRow= $(this).parent().parent();
-    var newFurnizor= inputRow.children('td').has('input').children('input').eq(0).val().trim();
+    var newFurnizor= inputRow.children('td').has('input').eq(0).children('input').val().trim();
     //ignore first insert if a furnizor is not provided
-    if(!( $('#avize').children('tr.data-row').length || !newFurnizor )) return;
+    //var dataRowsCount= $('#avize').children('tr.data-row').length;
+    if(!( $('#avize').children('tr.data-row').length || newFurnizor )) return;
     //whenever a furnizor is provided, create a section (with its own provider and subtotal)
     if(newFurnizor) newSection(inputRow);
     else appendDataRow(inputRow);
@@ -113,6 +147,6 @@ function pageLoaded($){
     initGlobals();
     acceptButton(els.headerRow).click(acceptHeader);
     editButton(els.headerRow).click(editHeader);
-    acceptButton( $('#avize').children('tbody').first().children('tr.input-row') ).click(acceptRow);
+    acceptButton( $('#avize').children('tr.input-row') ).click(acceptRow);
 }
 jQuery(pageLoaded);
