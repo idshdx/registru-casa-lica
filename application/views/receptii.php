@@ -33,13 +33,24 @@
 						</ul>
 					</div>
 				</div>
+                <div class="navbar-form navbar-left hidden">
+                    <div class="label-page-info">
+                        <p>
+                            <span class="label label-primary">Rânduri Rămase:
+                                <span id="randuri-ramase">0</span>
+                            </span>
+                        </p>
+                    </div>
+                </div>
 			</div>
 		</div>
 	</nav>
   <table style="display: none;">
       <tbody>
           <tr>
-              <td id="template-input"><input type="text" class="form-control usr-input"></td>
+              <td id="template-input">
+                  <input type="text" class="form-control usr-input">
+              </td>
           </tr>
       </tbody>
   </table>
@@ -49,7 +60,7 @@
         <div id="message" class="alert alert-info text-center" role="alert">
             <h4>Adăugaţi o recepţie folosind butonul "Adaugă Recepţie" de mai sus.</h4>
         </div>
-		<div id="template_receptie">
+		<div id="template_receptie" class="receptie">
             <table class="table table-bordered text-center">
                 <tbody>
                     <tr class="receptie-header">

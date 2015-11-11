@@ -1,5 +1,9 @@
 /* global els */
 
+nonDataRowsPerReceptie= 6;
+receptieHeightInRows= 13;
+maxRows= 32 + receptieHeightInRows;
+
 /***
  * utility functions
  */
@@ -137,12 +141,23 @@ function acceptRow(){
     acceptButton(tr).click(acceptChanges).click();
     clearInputs(trInput);
     displayTotals( tr.parent() );
+    countDataRows();
 }
 function editHeader(){
     var tr= $(this).parent().parent();
     tr.children('td:not(.action)').each(textToInput);
     hide(editButton(tr));
     show(acceptButton(tr));
+}
+function countDataRows(){
+    var receptii= $('#receptii').children('div.receptie');
+    var dataRows= receptii.children('table:nth-child(2)').children('tbody').children('tr');
+    var dataRowsCount= dataRows.length - receptii.length * nonDataRowsPerReceptie;
+
+    var rowsLeft = maxRows - dataRowsCount;
+
+    //var rowsLeft= maxRows - (dataRows.length + receptii.length * receptieHeightInRows );
+    $('#randuri-ramase').text(rowsLeft);
 }
 //will be called on "add receptie" dropdown <LI> click
 function generateReceptie(){
@@ -156,6 +171,9 @@ function generateReceptie(){
     receptie.find('button.btn-success:not(.action-accept-header)').click(acceptRow);
     els.receptii.css('margin-top', 'initial');
     hide(els.message);
+    maxRows -= receptieHeightInRows;
+    countDataRows();
+    $('#randuri-ramase').parent().parent().parent().parent().removeClass('hidden');
 }
 function displayTotals(tbody){
     var displayRows= tbody.children('tr.display');

@@ -43,6 +43,13 @@
 			            </div>
 			        </div>
 				</div>
+                <div class="navbar-form navbar-left">
+                    <div class="label-page-info">
+                        <p>
+                            <span class="label label-primary">Rânduri Rămase: <span id="randuri-ramase">27</span></span>
+                        </p>
+                    </div>
+                </div>
                 <div class="navbar-form navbar-right">
                     <button type="submit" class="btn btn-primary" id="logout">Logout</button>
                 </div>

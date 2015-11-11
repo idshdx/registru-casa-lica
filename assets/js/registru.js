@@ -14,7 +14,7 @@
  *
  * */
 
-
+maxRows= 27;
 /***
  * utility functions
  */
@@ -101,6 +101,7 @@ function requestRecordUpdate() {
     //she is trying to clear the record instead of update it, so we do that instead
     if(record.Suma=='') {
         tr.remove();
+        countDataRows();
         requestRecordDelete(recordID);
         return;
     }
@@ -151,6 +152,7 @@ function requestNewRecord() {
     //alert(tip+'\n'+jso2string(data)); //debugging
     clearInputRowValues(tables[currentTableType]);
     $.post(URLRoot+'action/add_record/Sume'+currentTableType+'/'+serverData.zi.ID, data, recordAdded);
+    tr.children().first().children().focus();
 }
 //ajax callback: new date added
 function endDayDone(data){
@@ -294,8 +296,9 @@ function setRowValue(tr, tdi, val){
     tr.children('td').eq(tdi).text(val);
 }
 function addDataRow(table) {
-    addedRow = templateRow(table).clone().removeClass('template_row').insertBefore(inputRow(table));
+    addedRow= templateRow(table).clone().removeClass('template_row').insertBefore(inputRow(table));
     addedRow.find('button').last().click(toggleEdit);
+    countDataRows();
     return addedRow;
 }
 //add a "record" (display) row with given record (object) values
@@ -352,7 +355,8 @@ function populatePage(){
     displayCumuli();
     datatitlu.text(serverData.zi.Data);
     displayTotals();
-    showHide(logoutButton, serverData.loggedin)
+    showHide(logoutButton, serverData.loggedin);
+    countDataRows();
 }
 function setupDates(){
 
@@ -401,7 +405,7 @@ function constructDatalistsFurnizori(){
     });
 }
 function editMode(enable){
-    showHide($('.input_row,.input_cell,.action'), enable);
+    showHide($('.input_row,.input_cell,.action').add($('#randuri-ramase').parent()), enable);
 }
 
 /***
@@ -439,7 +443,16 @@ function editSoldInitial(){
     $('#edit_sold_initial').val(sold_initial.text());
     $('#sold_initial_popup').modal();
 }
-
+function countDataRows(){
+    var count= 0;
+    forEachMember(tables, function(tbody){
+       count+= tbody.children('tr').length - 3;
+    });
+    var rowsLeft= maxRows - count;
+    $('#randuri-ramase').text(rowsLeft)
+        .parent().removeClass('label-primary').removeClass('label-danger')
+        .addClass(rowsLeft<0 ? 'label-danger' : 'label-primary');
+}
 //set global variables; the order of some of the function calls matters;
 function pageLoaded($) {
     window.currentTableType= '';

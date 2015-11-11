@@ -71,7 +71,7 @@
                 <tr class="button input-row">
                     <td><input type="text" class="form-control usr-input"></td>
                     <td><input type="text" class="form-control usr-input"></td>
-                    <td class="currency"><input type="text" class="form-control usr-input"></td>
+                    <td><input type="text" class="form-control usr-input"></td>
                     <td class="currency"><input type="text" class="form-control usr-input"></td>
                     <td class="currency"><input type="text" class="form-control usr-input"></td>
                     <td class="currency"><input type="text" class="form-control usr-input"></td>
@@ -103,7 +103,7 @@
                 <span class="glyphicon glyphicon-print"></span> Printează
             </button>
         </div>
-        <br />
+        <br id="spacer" />
     </div>
 </body>
 </html>

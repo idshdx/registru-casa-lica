@@ -33,7 +33,7 @@ function inputToText(){
 function textToInput(){
     var el= $(this);
     var val= el.text();
-    $(els.inputTemplate).appendTo(el.text('')).val(val);
+    $(els.inputTemplate).appendTo(el.text('')).val(val).keydown(passFocusToNextInputCell);
 }
 function hide(el){
     el.addClass('hidden');
@@ -46,6 +46,14 @@ function display(el, visible){
 }
 function acceptButton(tr){
     return tr.children('td.action').children('button.btn-success');
+}
+function passFocusToNextInputCell(eventData){
+    if(eventData.keyCode==40) {
+        if($(this).parent().nextAll().has('input').length)
+            $(this).parent().nextAll().has('input').first().children('input').focus();
+        else
+            $(this).parent().nextAll().has('button').first().children('button').focus();
+    }
 }
 function editButton(tr){
     return tr.children('td.action').children('button.btn-primary');
@@ -124,8 +132,10 @@ function newSection(inputRow){
     var newAvizInputRow= inputRow.clone().insertAfter(inputRow.next());
     inputRow.children('td').has('input').each(clearChildInput);
     $(els.subtotalRowTemplate).insertAfter(newAvizInputRow);
+    newAvizInputRow.children('td').children('input').keydown(passFocusToNextInputCell);
     appendDataRow( newAvizInputRow );
     acceptButton(newAvizInputRow).off('click').click(acceptRow);
+    newAvizInputRow.children().first().children().focus();
     //remove the default empty section when using it to generate (clone) the first section (by completing a furnizor)
     if( $('#avize').children('tr').first().hasClass('input-row') ) {
         $('#avize').children('tr').first().remove(); //the input-row
@@ -135,18 +145,21 @@ function newSection(inputRow){
 }
 function acceptRow(){
     var inputRow= $(this).parent().parent();
-    var newFurnizor= inputRow.children('td').has('input').eq(0).children('input').val().trim();
+    var newFurnizor= inputRow.children('td').has('input').eq(0).children('input').focus().val().trim();
     //ignore first insert if a furnizor is not provided
     //var dataRowsCount= $('#avize').children('tr.data-row').length;
     if(!( $('#avize').children('tr.data-row').length || newFurnizor )) return;
     //whenever a furnizor is provided, create a section (with its own provider and subtotal)
     if(newFurnizor) newSection(inputRow);
     else appendDataRow(inputRow);
+    inputRow.children().first().children().focus();
 }
 function pageLoaded($){
     initGlobals();
     acceptButton(els.headerRow).click(acceptHeader);
     editButton(els.headerRow).click(editHeader);
     acceptButton( $('#avize').children('tr.input-row') ).click(acceptRow);
+    //make inputs pass focus to next input in row when user presses the down arrow key.
+    $('#avize').children('tr.input-row').children('td').children('input').keydown(passFocusToNextInputCell);
 }
 jQuery(pageLoaded);
