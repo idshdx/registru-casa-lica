@@ -1,4 +1,5 @@
 
+maxRows= 38;
 // an object that stores values associated with a (jQuery) DOM element
 // we set this object as a custom DOM property, for persistence between function calls
 function customData(element){
@@ -55,6 +56,10 @@ function passFocusToNextInputCell(eventData){
             $(this).parent().nextAll().has('button').first().children('button').focus();
     }
 }
+function nthChild(tr, index){
+    var els= tr.children();
+    return els.eq( (index<0 ? els.length : 0) + index )
+}
 function editButton(tr){
     return tr.children('td.action').children('button.btn-primary');
 }
@@ -74,7 +79,7 @@ function initGlobals(){
         inputTemplate: '<input type="text" class="form-control usr-input button">',
         totalGeneral: $('#total'),
         totalGenRow: $('#total-row'),
-        subtotalRowTemplate: $('#avize').children('tr.subtotal-row')[0].outerHTML
+        subtotalRowTemplate: $('#avize').children('tr.subtotal-row').clone().removeClass('hidden')[0].outerHTML
     };
     window.gb= {};
 }
@@ -98,6 +103,8 @@ function acceptChanges(){
     var tr= $(this).parent().parent();
     hide(acceptButton(tr));
     tr.children('td').has('input').each(inputToText);
+    //assign cell on column 'Valoarea' the result of Pret * Cantitate
+    nthChild(tr, -2).text( formatCurrency( parseFloat(nthChild(tr,-4).text()) * parseFloat(nthChild(tr,-3).text()) ) );
     show(editButton(tr));
     updateSubtotal(tr);
 }
@@ -152,6 +159,7 @@ function acceptRow(){
     //whenever a furnizor is provided, create a section (with its own provider and subtotal)
     if(newFurnizor) newSection(inputRow);
     else appendDataRow(inputRow);
+
     inputRow.children().first().children().focus();
 }
 function pageLoaded($){

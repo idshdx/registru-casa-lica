@@ -74,7 +74,7 @@
                     <td><input type="text" class="form-control usr-input"></td>
                     <td class="currency"><input type="text" class="form-control usr-input"></td>
                     <td class="currency"><input type="text" class="form-control usr-input"></td>
-                    <td class="currency"><input type="text" class="form-control usr-input"></td>
+                    <td></td>
                     <td class="action">
                         <button class="btn btn-primary btn-xs hidden">
                             <span class="glyphicon glyphicon-pencil"></span> Editează
