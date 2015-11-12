@@ -23,6 +23,15 @@
 					<li class="active"><a href="#">Aviz de Predare</a></li>
 				</ul>
 			</div>
+            <div class="navbar-form navbar-left">
+                <div class="label-page-info">
+                    <p>
+                        <span class="label label-primary">Rânduri Rămase:
+                            <span id="randuri-ramase">0</span>
+                        </span>
+                    </p>
+                </div>
+            </div>
 		</div>
 	</nav>
     <div class="container">
@@ -87,13 +96,13 @@
                 <tr class="subtotal-row hidden">
                     <td colspan="2" class="subtotal-border-right"></td>
                     <td colspan="3" class="bold subtotal-border-left">Subtotal</td>
-                    <td class="bold">99999.00</td>
+                    <td class="bold"></td>
                 </tr>
                 <tr id="total-row" class="big-row">
                     <td class="bold">Ştampila Unităţii</td>
                     <td class="bold">Semnătura de Primire</td>
                     <td colspan="3" class="bold">Total</td>
-                    <td id="total" class="bold bigfont">99999.99</td>
+                    <td id="total" class="bold bigfont"></td>
                 </tr>
             </tbody>
         </table>

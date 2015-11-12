@@ -148,19 +148,28 @@ function newSection(inputRow){
         $('#avize').children('tr').first().remove(); //the input-row
         $('#avize').children('tr').first().remove(); //the subtotal-row
     }
+    if(sectionsCount()==1) $('#avize').children('tr.subtotal-row').addClass('hidden');
     if(sectionsCount() == 2) $('#avize').children('tr.subtotal-row').removeClass('hidden');
+}
+function countDataRows(){
+    var count= maxRows - $('#avize').children('tr.data-row,tr.subtotal-row:not(.hidden)').length;
+    $('#randuri-ramase').text(count).parent()
+        .removeClass('label-danger label-primary')
+        .addClass(count<0?'label-danger':'label-primary');
 }
 function acceptRow(){
     var inputRow= $(this).parent().parent();
+    // get user-input furnizor name
     var newFurnizor= inputRow.children('td').has('input').eq(0).children('input').focus().val().trim();
     //ignore first insert if a furnizor is not provided
     //var dataRowsCount= $('#avize').children('tr.data-row').length;
     if(!( $('#avize').children('tr.data-row').length || newFurnizor )) return;
     //whenever a furnizor is provided, create a section (with its own provider and subtotal)
+    inputRow.children().first().children().focus();
     if(newFurnizor) newSection(inputRow);
     else appendDataRow(inputRow);
 
-    inputRow.children().first().children().focus();
+    countDataRows();
 }
 function pageLoaded($){
     initGlobals();
@@ -169,5 +178,6 @@ function pageLoaded($){
     acceptButton( $('#avize').children('tr.input-row') ).click(acceptRow);
     //make inputs pass focus to next input in row when user presses the down arrow key.
     $('#avize').children('tr.input-row').children('td').children('input').keydown(passFocusToNextInputCell);
+    $('#randuri-ramase').text(maxRows);
 }
 jQuery(pageLoaded);

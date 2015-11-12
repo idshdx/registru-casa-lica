@@ -1,29 +1,37 @@
 @media print {
+    html, body {
+        height: 99%;
+    }
     body {
         font-size: 1.14em;
     }
-    .action {
+    .action, #spacer {
         display: none;
     }
-    .screen, .button, .save, .print, footer {
+    .screen, .button, .save, .print, .action, #spacer {
         display: none;
     }
-    .subtotal-border-right {
-      border-right-style: none !important;
+    #subtotal-border-right {
+        border-right-style: none !important;
     }
-    .subtotal-border-left {
-      border-left-style: none !important;
+    #subtotal-border-left {
+        border-left-style: none !important;
     }
-	.receptie-page-break { 
-		page-break-inside:avoid;
-		page-break-after:auto;
-	}
-	tr {
-		page-break-inside:avoid;
-	}
-	thead { 
-		display:table-header-group; 
-	}
+    .receptie-page-break {
+        page-break-after:auto;
+        page-break-inside:avoid;
+    }
+    tr {
+        page-break-inside:avoid;
+        page-break-after:auto;
+    }
+    td {
+        page-break-inside:avoid;
+        page-break-after:auto;
+    }
+    thead {
+        display:table-header-group;
+    }
 }
 @media screen {
     body {
@@ -50,10 +58,10 @@
     color: #fff;
 }
 .glyphicon-remove {
-	color:#d9534f;
-	font-size:12px;
-	margin-right:-6px;
-	vertical-align: center;
+    color:#d9534f;
+    font-size:12px;
+    margin-right:-6px;
+    vertical-align: center;
 }
 .input-group-addon, .calendar {
     border-radius: 1px;
@@ -70,7 +78,7 @@
     cursor: pointer;
 }
 .deleteable:hover{
-	background-color:#eee;
+    background-color:#eee;
 }
 .btn {
     width: 100%;
@@ -84,19 +92,19 @@
 }
 .navbar {
     border-radius: 0;
-	box-shadow: 0 8px 17px rgba(0, 0, 0, .2);
+    box-shadow: 0 8px 17px rgba(0, 0, 0, .2);
 }
 .usr-input, .button, .screen {
     height: 2em;
     border-radius: 1px;
-	padding: 0;
+    padding: 0;
 }
 .login-input {
     border-radius: 1px;
 }
 .save, .print {
     width: 25%;
-	box-shadow: 0 8px 17px rgba(0, 0, 0, .2);
+    box-shadow: 0 8px 17px rgba(0, 0, 0, .2);
 }
 .panel {
     border-radius: 1px;
@@ -115,22 +123,10 @@
 .bigfont {
     font-size: 1.16em;
 }
-footer {
-    width: 100%;
-    background-color: #101010;
-    height: 52px;
-    color: #fff;
-}
-footer > p {
-    text-align: center;
-    padding-top: 1%;
-    font-size: 0.9em;
-    font-weight: 300;
-}
 thead>tr:first-child, tbody>tr:last-child{
     font-weight: bold;
 }
-.template_row, .template_cell, .template-aviz{
+.template_row, .template_cell{
     display: none;
 }
 input {
@@ -140,21 +136,29 @@ input {
     height: 80px;
 }
 .btn-sm {
-     padding-left: 5px;
-     padding-right: 5px;
-     min-width: 8em;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-width: 8em;
 }
 .modal-footer, .modal-body, .modal-title {
-	text-align: center;
+    text-align: center;
 }
 .modal-content, .modal-content input {
-	border-radius: 1px;
+    border-radius: 1px;
 }
 .modal {
-	margin-top: 12%;
+    margin-top: 12%;
+}
+.label{
+    padding: 5px 8px;
+}
+.label-page-info > p {
+    font-size: 1.35em;
+    margin-top: 2px;
+    margin-bottom: 0;
 }
 #logout {
-	min-width: 85px;
+    min-width: 85px;
 }
 #template_receptie{
     display: none;
